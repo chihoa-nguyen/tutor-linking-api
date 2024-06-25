@@ -11,7 +11,7 @@ public enum ErrorCode {
     EMAIL_EXISTED(1002, "Email existed", HttpStatus.BAD_REQUEST),
     USERNAME_INVALID(1003, "Username must be at least 3 characters", HttpStatus.BAD_REQUEST),
     INVALID_PASSWORD(1004, "Password must be at least 8 characters", HttpStatus.BAD_REQUEST),
-    USER_NOT_EXISTED(1005, "User not existed", HttpStatus.NOT_FOUND),
+    USER_NOT_EXISTED(1005, "Người dùng không tồn tại trong hệ thống", HttpStatus.NOT_FOUND),
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
     PERMISSION_EXISTED(1008, "Permission existed", HttpStatus.BAD_REQUEST),
@@ -25,7 +25,8 @@ public enum ErrorCode {
     GRADE_NOT_FOUND(1014,"Khối học không tồn tại",HttpStatus.NOT_FOUND ),
     BOOK_NOT_FOUND(1015,"Book not existed",HttpStatus.NOT_FOUND),
     PASSWORD_WRONG(1016,"Invalid password" , HttpStatus.BAD_REQUEST),
-    HAS_NOT_READ(1017,"User has not read this book", HttpStatus.BAD_REQUEST);
+    EMAIL_USED(1017,"Email này đã tồn tại trong hệ thống", HttpStatus.BAD_REQUEST),
+    PHONE_NUMBER_USED(1018,"Số điện thoại này đã tồn tại trong hệ thống", HttpStatus.BAD_REQUEST);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
