@@ -1,5 +1,7 @@
 package com.nchowf.tutor_linking_api.subject;
 
+import com.nchowf.tutor_linking_api.exception.AppException;
+import com.nchowf.tutor_linking_api.exception.ErrorCode;
 import com.nchowf.tutor_linking_api.subject.dto.SubjectRequest;
 import com.nchowf.tutor_linking_api.subject.dto.SubjectResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +15,11 @@ public class SubjectService {
     private final SubjectRepo subjectRepo;
     private final SubjectMapper subjectMapper;
 
-    public SubjectResponse create(SubjectRequest subjectRequest) {
-        Subject subject = subjectMapper.toSubject(subjectRequest);
-//        if(subjectRepo.existsSubjectByName(subject.getName())){
-//            throw new IllegalArgumentException("Subject already exists");
-//        }
+    public SubjectResponse create(SubjectRequest request) {
+        if(subjectRepo.existsSubjectByName(request.getName())){
+            throw new AppException(ErrorCode.SUBJECT_EXISTED);
+        }
+        Subject subject = subjectMapper.toSubject(request);
         return subjectMapper.toSubjectResponse(subjectRepo.save(subject));
     }
 
@@ -27,8 +29,7 @@ public class SubjectService {
 
     public SubjectResponse getById(Integer id) {
         Subject subject = subjectRepo.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("Subject not found"));
-
+                .orElseThrow(()-> new AppException(ErrorCode.SUBJECT_NOT_FOUND));
         return subjectMapper.toSubjectResponse(subject);
     }
 
@@ -37,7 +38,7 @@ public class SubjectService {
     }
     public SubjectResponse updateSubject(Integer id, SubjectRequest request){
         Subject subject = subjectRepo.findById(id)
-               .orElseThrow(()-> new IllegalArgumentException("Subject not found"));
+               .orElseThrow(()-> new AppException(ErrorCode.SUBJECT_NOT_FOUND));
         subject.setName(request.getName());
         return subjectMapper.toSubjectResponse(subjectRepo.save(subject));
     }

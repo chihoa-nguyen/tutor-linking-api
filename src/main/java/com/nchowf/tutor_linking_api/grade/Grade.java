@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
                 columnNames = "name"
         )
 )
-
 public class Grade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

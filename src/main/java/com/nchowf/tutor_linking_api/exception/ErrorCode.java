@@ -21,6 +21,8 @@ public enum ErrorCode {
     ROLE_NOT_EXISTED(1012, "Role not existed", HttpStatus.NOT_FOUND),
     SUBJECT_EXISTED(1013,"Môn học đã tồn tại !",HttpStatus.BAD_REQUEST ),
     SUBJECT_NOT_FOUND(1014,"Môn học không tồn tại",HttpStatus.NOT_FOUND ),
+    GRADE_EXISTED(1013,"Khối học đã tồn tại !",HttpStatus.BAD_REQUEST ),
+    GRADE_NOT_FOUND(1014,"Khối học không tồn tại",HttpStatus.NOT_FOUND ),
     BOOK_NOT_FOUND(1015,"Book not existed",HttpStatus.NOT_FOUND),
     PASSWORD_WRONG(1016,"Invalid password" , HttpStatus.BAD_REQUEST),
     HAS_NOT_READ(1017,"User has not read this book", HttpStatus.BAD_REQUEST);
