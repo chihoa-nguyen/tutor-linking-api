@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+  tomcat:
+    max-swallow-size: 100MB
+spring:
+  main:
+    banner-mode: off
+  datasource:
+    url: jdbc:mysql://localhost:3306/tutor_linking
+    username: root
+    password: 519216
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+jwt:
+  secret-key: "8d9d5e010c2cb62a01135d1f9cac76748d604b902d57c2e98665253df1809ad8"
+  expiration-time: 86400 # in seconds
+  refreshable-time: 259200 # in seconds
+
