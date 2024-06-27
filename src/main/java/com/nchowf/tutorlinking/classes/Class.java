@@ -40,7 +40,7 @@ public class Class {
             ))
     private Set<Subject> subjects;
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = CascadeType.DETACH
     )
     @JoinColumn(
             name = "grade_id",
