@@ -26,7 +26,8 @@ public enum ErrorCode {
     BOOK_NOT_FOUND(1015,"Book not existed",HttpStatus.NOT_FOUND),
     PASSWORD_WRONG(1016,"Invalid password" , HttpStatus.BAD_REQUEST),
     EMAIL_USED(1017,"Email này đã tồn tại trong hệ thống", HttpStatus.BAD_REQUEST),
-    PHONE_NUMBER_USED(1018,"Số điện thoại này đã tồn tại trong hệ thống", HttpStatus.BAD_REQUEST);
+    PHONE_NUMBER_USED(1018,"Số điện thoại này đã tồn tại trong hệ thống", HttpStatus.BAD_REQUEST),
+    CLASS_NOT_FOUND(1019,"Lớp học không tồn tại trong hệ thống" , HttpStatus.NOT_FOUND);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

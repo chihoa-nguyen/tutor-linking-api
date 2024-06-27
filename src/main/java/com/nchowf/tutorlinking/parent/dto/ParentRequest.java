@@ -1,8 +1,10 @@
 package com.nchowf.tutorlinking.parent.dto;
 
-import com.nchowf.tutorlinking.utils.enums.Gender;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
