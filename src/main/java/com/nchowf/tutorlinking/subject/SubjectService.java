@@ -1,7 +1,7 @@
 package com.nchowf.tutorlinking.subject;
 
 import com.nchowf.tutorlinking.exception.AppException;
-import com.nchowf.tutorlinking.exception.ErrorCode;
+import com.nchowf.tutorlinking.utils.enums.ErrorCode;
 import com.nchowf.tutorlinking.subject.dto.SubjectRequest;
 import com.nchowf.tutorlinking.subject.dto.SubjectResponse;
 import lombok.RequiredArgsConstructor;

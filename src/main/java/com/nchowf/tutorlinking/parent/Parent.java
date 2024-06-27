@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.parent;
 
+import com.nchowf.tutorlinking.utils.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,8 @@ public class Parent {
     private Integer parentId;
     @Column(nullable = false)
     private String name;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     @Column(nullable = false)
     private String phoneNumber;
     @Column(nullable = false)

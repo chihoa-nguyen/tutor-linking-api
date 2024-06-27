@@ -1,5 +1,7 @@
 package com.nchowf.tutorlinking.exception;
 
+import com.nchowf.tutorlinking.utils.enums.ErrorCode;
+
 public class AppException extends RuntimeException{
     public AppException(ErrorCode errorCode) {
         super(errorCode.getMessage());

@@ -1,7 +1,7 @@
 package com.nchowf.tutorlinking.grade;
 
 import com.nchowf.tutorlinking.exception.AppException;
-import com.nchowf.tutorlinking.exception.ErrorCode;
+import com.nchowf.tutorlinking.utils.enums.ErrorCode;
 import com.nchowf.tutorlinking.grade.dto.GradeRequest;
 import com.nchowf.tutorlinking.grade.dto.GradeResponse;
 import lombok.RequiredArgsConstructor;
