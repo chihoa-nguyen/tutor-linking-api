@@ -25,6 +25,8 @@ public class ClassRequest {
     private String time;
     @NotNull(message = "Khối dạy không được thiếu")
     private Integer gradeId;
+    @Min(value = 1, message ="Học phí phải là số dương")
+    private int fee;
     private String address;
     @NotNull(message = "Yêu cầu về chức vụ của gia sư không được thiếu")
     private int positionRequired;

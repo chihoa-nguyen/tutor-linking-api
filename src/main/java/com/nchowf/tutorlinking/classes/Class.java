@@ -47,6 +47,7 @@ public class Class {
             referencedColumnName = "gradeId"
     )
     private Grade grade;
+    private int fee;
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(
             name = "parent_id",

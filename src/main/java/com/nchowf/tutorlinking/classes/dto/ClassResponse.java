@@ -17,6 +17,7 @@ public class ClassResponse {
     private Integer numberSession;
     private String time;
     private String grade;
+    private int fee;
     private String address;
     private String positionRequired;
     private String genderRequired;
