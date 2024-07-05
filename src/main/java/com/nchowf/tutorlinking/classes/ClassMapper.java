@@ -17,7 +17,7 @@ import java.util.Set;
 public interface ClassMapper {
     @Named("intToGender")
     static Gender intToGender(int genderRequired) {
-        return genderRequired == 0 ? Gender.MAN :
+        return genderRequired == 0 ? Gender.MALE :
                 (genderRequired == 1 ? Gender.FEMALE : Gender.NONE);
     }
     @Named("intToPosition")

@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class ParentResponse {
     private Integer parentId;
     private String name;
-    private String gender;
     private String phoneNumber;
     private String email;
     private String address;

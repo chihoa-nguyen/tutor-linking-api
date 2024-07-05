@@ -14,8 +14,6 @@ import java.util.List;
 public class ParentService {
     private final ParentRepo parentRepo;
     private final ParentMapper parentMapper;
-
-
     public ParentResponse create(ParentRequest request){
         if (parentRepo.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_NUMBER_USED);

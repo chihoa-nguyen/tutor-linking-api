@@ -14,9 +14,6 @@ public class ParentRequest {
     @NotNull(message = "Họ tên không được thiếu")
     @NotBlank(message = "Họ tên không được để trống")
     private String name;
-    @Min(value = 0, message = "Chỉ nhận 0 (Nam) hoặc 1 (Nữ)")
-    @Max(value = 0, message = "Chỉ nhận 0 (Nam) hoặc 1 (Nữ)")
-    private int gender;
     @NotNull(message = "Số điện thoại không được thiếu")
     @Size(min=10, max=10, message = "Số điện thoại phải có đủ 10 chữ số")
     @Pattern(regexp = "^[0-9\\-+]{9,15}$", message = "Số điện thoại không hợp lệ")

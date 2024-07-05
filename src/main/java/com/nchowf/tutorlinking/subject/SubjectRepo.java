@@ -9,5 +9,4 @@ import java.util.List;
 public interface SubjectRepo extends JpaRepository<Subject, Integer> {
     List<Subject> findSubjectsByNameContains(String name);
     boolean existsSubjectByName(String name);
-
 }
