@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.parent;
 
+import com.nchowf.tutorlinking.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,17 +19,8 @@ import lombok.NoArgsConstructor;
                 columnNames = "email"
         )}
 )
-public class Parent {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer parentId;
-    @Column(nullable = false)
-    private String name;
+public class Parent extends User {
     @Column(nullable = false)
     private String phoneNumber;
-    @Column(nullable = false)
-    private String email;
     private String address;
-    @Column(nullable = false)
-    private String password;
 }

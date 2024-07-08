@@ -51,7 +51,7 @@ public class Class {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(
             name = "parent_id",
-            referencedColumnName = "parentId"
+            referencedColumnName = "id"
     )
     private Parent parent;
     @Enumerated(EnumType.STRING)
