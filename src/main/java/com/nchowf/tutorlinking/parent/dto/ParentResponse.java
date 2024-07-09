@@ -11,10 +11,4 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ParentResponse extends UserResponse {
-    private Integer parentId;
-    private String name;
-    private String phoneNumber;
-    private String email;
-    private String address;
-//    private String password;
 }
