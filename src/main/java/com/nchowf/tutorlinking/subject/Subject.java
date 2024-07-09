@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.subject;
 
+import com.nchowf.tutorlinking.utils.AbstractEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,10 +16,7 @@ import lombok.NoArgsConstructor;
                 columnNames = "name"
         )
 )
-public class Subject {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer subjectId;
+public class Subject extends AbstractEntity {
     @Column(nullable = false)
     private String name;
 }

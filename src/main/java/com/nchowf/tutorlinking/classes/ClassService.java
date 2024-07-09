@@ -46,7 +46,7 @@ public class ClassService {
     }
     public ClassResponse updateClass(Long id, ClassRequest request){
         Class classroom = classRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
-        if(!request.getGradeId().equals(classroom.getGrade().getGradeId())){
+        if(!request.getGradeId().equals(classroom.getGrade().getId())){
             Grade grade = gradeRepo.findById(request.getGradeId())
                     .orElseThrow(()-> new AppException(ErrorCode.GRADE_NOT_FOUND));
             classroom.setGrade(grade);

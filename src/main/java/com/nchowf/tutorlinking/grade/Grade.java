@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.grade;
 
+import com.nchowf.tutorlinking.utils.AbstractEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,10 +16,7 @@ import lombok.NoArgsConstructor;
                 columnNames = "name"
         )
 )
-public class Grade {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer gradeId;
+public class Grade extends AbstractEntity {
     @Column(nullable = false)
     private String name;
 }

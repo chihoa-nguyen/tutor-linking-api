@@ -11,6 +11,6 @@ public interface ParentMapper {
 
     Parent toParent(ParentRequest parentRequest);
     ParentResponse toParentResponse(Parent parent);
-    @Mapping(target = "parentId", ignore = true)
+    @Mapping(target = "id", ignore = true)
     void toUpdateParent(@MappingTarget Parent parent, ParentRequest parentRequest);
 }
