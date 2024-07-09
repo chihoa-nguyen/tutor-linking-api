@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.parent.dto;
 
+import com.nchowf.tutorlinking.user.dto.UserRequest;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ParentRequest {
+public class ParentRequest extends UserRequest {
     @NotNull(message = "Họ tên không được thiếu")
     @NotBlank(message = "Họ tên không được để trống")
     private String name;

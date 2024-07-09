@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
         )}
 )
 public class Parent extends User {
-    @Column(nullable = false)
+    @Column(length = 10, nullable = false)
     private String phoneNumber;
     private String address;
 }

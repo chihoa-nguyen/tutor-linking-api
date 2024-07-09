@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.parent.dto;
 
+import com.nchowf.tutorlinking.user.dto.UserResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ParentResponse {
+public class ParentResponse extends UserResponse {
     private Integer parentId;
     private String name;
     private String phoneNumber;

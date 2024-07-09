@@ -24,16 +24,22 @@ public class Tutor extends User {
     private String birthday;
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    @Column(nullable = false)
     private String avt;
+    @Column(nullable = false)
     private String degree;
+    @Column(nullable = false)
     private String address;
+    @Column(nullable = false)
     private String universityName;
+    @Column(nullable = false)
     private String major;
     @Enumerated(EnumType.STRING)
     private Position position;
+    @Column(length = 10, nullable = false)
     private String phoneNumber;
     @Type(JsonType.class)
-    @Column(columnDefinition = "json")
+    @Column(columnDefinition = "json", nullable = false)
     private List<String> teachingArea;
     @ManyToMany( fetch = FetchType.LAZY )
     @JoinTable(name ="tutor_subject")
