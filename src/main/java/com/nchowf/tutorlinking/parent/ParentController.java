@@ -7,18 +7,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/parent")
 @RequiredArgsConstructor
 public class ParentController {
-//    private final ParentService parentService;
-//    @PostMapping("")
-//    @ResponseStatus(value =HttpStatus.CREATED)
-//    public ParentResponse add(@RequestBody @Valid ParentRequest parentRequest){
-//        return parentService.create(parentRequest);
-//    }
+    private final ParentService parentService;
+    @PostMapping("")
+    @ResponseStatus(value =HttpStatus.CREATED)
+    public ParentResponse add(@RequestBody @Valid ParentRequest parentRequest){
+        return parentService.register(parentRequest);
+    }
 //
 //    @GetMapping("")
 //    @ResponseStatus(value = HttpStatus.FOUND)

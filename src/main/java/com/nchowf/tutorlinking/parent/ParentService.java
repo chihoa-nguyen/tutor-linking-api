@@ -1,31 +1,31 @@
 package com.nchowf.tutorlinking.parent;
 
 import com.nchowf.tutorlinking.exception.AppException;
-import com.nchowf.tutorlinking.user.UserService;
-import com.nchowf.tutorlinking.user.dto.UserRequest;
-import com.nchowf.tutorlinking.user.dto.UserResponse;
-import com.nchowf.tutorlinking.utils.enums.ErrorCode;
 import com.nchowf.tutorlinking.parent.dto.ParentRequest;
 import com.nchowf.tutorlinking.parent.dto.ParentResponse;
+import com.nchowf.tutorlinking.user.UserService;
+import com.nchowf.tutorlinking.utils.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ParentService implements UserService<ParentRequest, ParentResponse> {
     private final ParentRepo parentRepo;
     private final ParentMapper parentMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public ParentResponse create(ParentRequest request) {
+    public ParentResponse register(ParentRequest request) {
         if (parentRepo.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_NUMBER_USED);
         if (parentRepo.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXISTED);
+        Parent parent = parentMapper.toParent(request);
+        parent.setPassword(passwordEncoder.encode(request.getPassword()));
         return parentMapper.toParentResponse(parentRepo
-                .save(parentMapper.toParent(request)));
+                .save(parent));
     }
 
 //

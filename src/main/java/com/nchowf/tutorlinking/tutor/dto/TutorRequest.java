@@ -3,18 +3,15 @@ package com.nchowf.tutorlinking.tutor.dto;
 import com.nchowf.tutorlinking.user.dto.UserRequest;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class TutorRequest extends UserRequest {
     @NotBlank(message = "Ngày sinh không được thiếu")
     @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$", message = "Ngày sinh có dạng dd/MM/yyyy")

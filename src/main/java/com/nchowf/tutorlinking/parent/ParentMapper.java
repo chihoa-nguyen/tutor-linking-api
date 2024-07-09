@@ -8,7 +8,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ParentMapper {
-
+    @Mapping(target = "password", ignore = true)
     Parent toParent(ParentRequest parentRequest);
     ParentResponse toParentResponse(Parent parent);
     @Mapping(target = "id", ignore = true)

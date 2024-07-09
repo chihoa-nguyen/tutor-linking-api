@@ -2,14 +2,12 @@ package com.nchowf.tutorlinking.user.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class UserRequest {
     @NotNull(message = "Họ tên không được thiếu")
     @NotBlank(message = "Họ tên không được để trống")

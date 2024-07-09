@@ -51,7 +51,7 @@ public interface ClassMapper {
     @Mapping(target = "parentId", source = "parent.id")
     @Mapping(target = "grade", source = "grade.name")
     ClassResponse toClassResponse(Class classroom);
-    @Mapping(target = "classId", ignore = true)
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "parent", ignore = true)
     @Mapping(target = "subjects", ignore = true)
     @Mapping(target = "grade", ignore = true)
