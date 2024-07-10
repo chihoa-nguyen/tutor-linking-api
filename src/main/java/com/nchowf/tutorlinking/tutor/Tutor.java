@@ -12,7 +12,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -40,7 +39,7 @@ public class Tutor extends User {
     private String phoneNumber;
     @Type(JsonType.class)
     @Column(columnDefinition = "json", nullable = false)
-    private List<String> teachingArea;
+    private Set<String> teachingArea;
     @ManyToMany( fetch = FetchType.LAZY )
     @JoinTable(name ="tutor_subject")
     private Set<Subject> subjects;

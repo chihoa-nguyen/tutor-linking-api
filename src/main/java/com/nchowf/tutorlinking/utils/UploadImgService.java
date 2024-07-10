@@ -10,7 +10,6 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -39,7 +38,7 @@ public class UploadImgService {
                 JSON_FACTORY, credential)
                 .build();
     }
-    public String uploadFileToDrive(File file, String folder_id) throws GeneralSecurityException, IOException {
+    public String uploadToDrive(File file, String folder_id) throws GeneralSecurityException, IOException {
         Drive drive = createDriveService();
         com.google.api.services.drive.model.File fileMetaData = new com.google.api.services.drive.model.File();
         fileMetaData.setName(file.getName());

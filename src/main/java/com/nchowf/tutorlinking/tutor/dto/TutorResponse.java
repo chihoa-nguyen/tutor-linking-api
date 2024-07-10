@@ -6,6 +6,7 @@ import com.nchowf.tutorlinking.user.dto.UserResponse;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Date;
 import java.util.Set;
 
 @Data
@@ -25,8 +26,8 @@ public class TutorResponse extends UserResponse {
     public TutorResponse() {
         super();
     }
-    public TutorResponse(Integer id, String email, String name, String phoneNumber, String address, String birthday, String gender, String avt, String degree, String university_name, String major, String position, Set<SubjectResponse> subjects, Set<GradeResponse> grades, Set<String> teachingArea, String desc) {
-        super(id, email, name, phoneNumber, address);
+    public TutorResponse(Integer id, String email, String name, String phoneNumber, String address, Date createdAt, Date updatedAt, String birthday, String gender, String avt, String degree, String university_name, String major, String position, Set<SubjectResponse> subjects, Set<GradeResponse> grades, Set<String> teachingArea, String desc) {
+        super(id, email, name, phoneNumber, address, createdAt, updatedAt);
         this.birthday = birthday;
         this.gender = gender;
         this.avt = avt;
