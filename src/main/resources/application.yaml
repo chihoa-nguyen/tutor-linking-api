@@ -23,4 +23,8 @@ jwt:
   secret-key: "8d9d5e010c2cb62a01135d1f9cac76748d604b902d57c2e98665253df1809ad8"
   expiration-time: 86400 # in seconds
   refreshable-time: 259200 # in seconds
+gg-driver:
+  root-url: "https://drive.google.com/uc?export=view&id="
+  avt-folder-id: "1o93q5Q_sPICBTu9g9hhJi_-jcfuR9uuf"
+  degree-folder-id: "1eaDnJJiGjHS3Pi5hZNKiWLK4XUhxSQr_"
 
