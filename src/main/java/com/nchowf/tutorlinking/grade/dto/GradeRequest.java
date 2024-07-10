@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class GradeRequest {
     @NotNull(message = "Tên khối không được thiếu")
     @NotBlank(message = "Tên khối không được trống")

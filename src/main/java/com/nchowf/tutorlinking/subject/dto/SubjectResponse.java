@@ -5,11 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class SubjectResponse {
-    private Long subjectId;
+    private Long id;
     private String name;
+    private Date createdAt;
+    private Date updatedAt;
 }
