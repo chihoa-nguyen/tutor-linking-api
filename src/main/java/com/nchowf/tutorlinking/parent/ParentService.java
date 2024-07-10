@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ParentService implements UserService<ParentRequest, ParentResponse> {
@@ -27,22 +29,29 @@ public class ParentService implements UserService<ParentRequest, ParentResponse>
         return parentMapper.toParentResponse(parentRepo
                 .save(parent));
     }
+    @Override
+    public ParentResponse getById(Integer id) {
+        Parent parent = parentRepo.findById(id)
+                .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXISTED)));
+        return parentMapper.toParentResponse(parent);
+    }
 
-//
-//    public ParentResponse getById(Integer id) {
-//        Parent parent = parentRepo.findById(id)
-//                .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXISTED)));
-//        return parentMapper.toParentResponse(parent);
-//    }
-//    public List<ParentResponse> getAll() {
-//        return parentRepo.findAll().stream()
-//                .map(parentMapper::toParentResponse).toList();
-//    }
-//    public ParentResponse update(Integer id, ParentRequest parentRequest) {
-//        Parent parent = parentRepo.findById(id)
-//                .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXISTED)));
-//        parentMapper.toUpdateParent(parent, parentRequest);
-//        return parentMapper.toParentResponse(parentRepo
-//               .save(parent));
-//    }
+    @Override
+    public List<ParentResponse> getAll() {
+        return parentRepo.findAll().stream()
+                .map(parentMapper::toParentResponse).toList();
+    }
+    @Override
+    public ParentResponse update(Integer id, ParentRequest parentRequest) {
+        Parent parent = parentRepo.findById(id)
+                .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXISTED)));
+        parentMapper.toUpdateParent(parent, parentRequest);
+        return parentMapper.toParentResponse(parentRepo
+               .save(parent));
+    }
+    @Override
+    public void delete(Integer id) {
+        Parent parent = parentRepo.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+        parentRepo.delete(parent);
+    }
 }
