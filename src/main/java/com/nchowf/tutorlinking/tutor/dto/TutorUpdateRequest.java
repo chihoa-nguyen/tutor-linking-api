@@ -29,7 +29,7 @@ public class TutorUpdateRequest extends UserUpdateRequest {
     @NotBlank(message = "Địa chỉ hiện tại không được thiếu")
     private String address;
     @NotBlank(message = "Tên trường đại học/cao đẳng không được thiếu")
-    private String university_name;
+    private String universityName;
     @NotBlank(message = "Tên chuyên ngành không được thiếu")
     private String major;
     @NotNull(message = "Chức vụ không được thiếu")

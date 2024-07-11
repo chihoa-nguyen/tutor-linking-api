@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -18,7 +17,7 @@ public class TutorResponse extends UserResponse {
     private String gender;
     private String avt;
     private String degree;
-    private String university_name;
+    private String universityName;
     private String major;
     private String position;
     private Set<SubjectResponse> subjects;

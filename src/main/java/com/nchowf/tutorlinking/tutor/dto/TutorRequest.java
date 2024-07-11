@@ -4,11 +4,13 @@ import com.nchowf.tutorlinking.user.dto.UserRequest;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,7 +29,7 @@ public class TutorRequest extends UserRequest {
     @NotBlank(message = "Địa chỉ hiện tại không được thiếu")
     private String address;
     @NotBlank(message = "Tên trường đại học/cao đẳng không được thiếu")
-    private String university_name;
+    private String universityName;
     @NotBlank(message = "Tên chuyên ngành không được thiếu")
     private String major;
     @NotNull(message = "Chức vụ không được thiếu")

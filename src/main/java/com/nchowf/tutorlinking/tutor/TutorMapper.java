@@ -2,10 +2,12 @@ package com.nchowf.tutorlinking.tutor;
 
 import com.nchowf.tutorlinking.tutor.dto.TutorRequest;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
+import com.nchowf.tutorlinking.tutor.dto.TutorUpdateRequest;
 import com.nchowf.tutorlinking.utils.enums.Gender;
 import com.nchowf.tutorlinking.utils.enums.Position;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
@@ -49,4 +51,12 @@ public interface TutorMapper {
     @Mapping(target = "gender", source = "gender", qualifiedByName = "genderToString")
     @Mapping(target = "position", source = "position", qualifiedByName = "positionToString")
     TutorResponse tuTutorResponse(Tutor tutor);
+    @Mapping(target = "id", ignore = true )
+    @Mapping(target = "subjects", ignore = true)
+    @Mapping(target = "grades", ignore = true)
+    @Mapping(target = "avt", ignore = true)
+    @Mapping(target = "degree", ignore = true)
+    @Mapping(target = "gender", source = "gender", qualifiedByName = "intToGender")
+    @Mapping(target = "position", source = "position", qualifiedByName = "intToPosition")
+    void updateTutor(@MappingTarget Tutor tutor, TutorUpdateRequest request);
 }

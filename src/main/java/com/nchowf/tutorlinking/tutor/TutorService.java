@@ -84,21 +84,39 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
 
     @Override
     public TutorResponse update(Integer id, TutorUpdateRequest request) {
-        return null;
+        if (tutorRepo.existsByPhoneNumber(request.getPhoneNumber()))
+            throw new AppException(ErrorCode.PHONE_NUMBER_USED);
+        Tutor tutor = tutorRepo.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        List<Subject> subjects = subjectRepo.findAllById(request.getSubjects());
+        List<Grade> grades = gradeRepo.findAllById(request.getGrades());
+//        File[] files = prepareFileToUpload(request);
+//        String[] url = uploadFileToDrive(files[0], files[1]);
+        tutorMapper.updateTutor(tutor, request);
+        tutor.setSubjects(new HashSet<>(subjects));
+        tutor.setGrades(new HashSet<>(grades));
+//        tutor.setAvt(url[0]);
+//        tutor.setDegree(url[1]);
+        return tutorMapper.tuTutorResponse(tutorRepo.save(tutor));
     }
 
     @Override
     public TutorResponse getById(Integer id) {
-        return null;
+        Tutor tutor = tutorRepo.findById(id)
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+        return tutorMapper.tuTutorResponse(tutor);
     }
 
     @Override
     public List<TutorResponse> getAll() {
-        return null;
+        return tutorRepo.findAll().stream()
+                .map(tutorMapper::tuTutorResponse).toList();
     }
 
     @Override
     public void delete(Integer id) {
-
+        Tutor tutor = tutorRepo.findById(id)
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+        tutorRepo.delete(tutor);
     }
 }
