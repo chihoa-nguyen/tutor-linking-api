@@ -2,6 +2,7 @@ package com.nchowf.tutorlinking.parent;
 
 import com.nchowf.tutorlinking.parent.dto.ParentRequest;
 import com.nchowf.tutorlinking.parent.dto.ParentResponse;
+import com.nchowf.tutorlinking.parent.dto.ParentUpdateRequest;
 import com.nchowf.tutorlinking.utils.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class ParentController {
 
     @PutMapping("/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public ApiResponse<ParentResponse> update(@PathVariable("id") Integer id, @RequestBody @Valid ParentRequest parentRequest) {
+    public ApiResponse<ParentResponse> update(@PathVariable("id") Integer id, @RequestBody @Valid ParentUpdateRequest parentRequest) {
         return ApiResponse.<ParentResponse>builder()
                 .message("Cập nhật thông tin thành công")
                 .data(parentService.update(id, parentRequest))

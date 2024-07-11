@@ -3,6 +3,7 @@ package com.nchowf.tutorlinking.parent;
 import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.parent.dto.ParentRequest;
 import com.nchowf.tutorlinking.parent.dto.ParentResponse;
+import com.nchowf.tutorlinking.parent.dto.ParentUpdateRequest;
 import com.nchowf.tutorlinking.user.UserService;
 import com.nchowf.tutorlinking.utils.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ParentService implements UserService<ParentRequest, ParentResponse> {
+public class ParentService implements UserService<ParentRequest,ParentUpdateRequest,ParentResponse> {
     private final ParentRepo parentRepo;
     private final ParentMapper parentMapper;
     private final PasswordEncoder passwordEncoder;
@@ -42,7 +43,7 @@ public class ParentService implements UserService<ParentRequest, ParentResponse>
                 .map(parentMapper::toParentResponse).toList();
     }
     @Override
-    public ParentResponse update(Integer id, ParentRequest parentRequest) {
+    public ParentResponse update(Integer id, ParentUpdateRequest parentRequest) {
         Parent parent = parentRepo.findById(id)
                 .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXISTED)));
         parentMapper.toUpdateParent(parent, parentRequest);

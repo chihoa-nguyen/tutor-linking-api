@@ -7,6 +7,7 @@ import com.nchowf.tutorlinking.subject.Subject;
 import com.nchowf.tutorlinking.subject.SubjectRepo;
 import com.nchowf.tutorlinking.tutor.dto.TutorRequest;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
+import com.nchowf.tutorlinking.tutor.dto.TutorUpdateRequest;
 import com.nchowf.tutorlinking.user.UserService;
 import com.nchowf.tutorlinking.utils.UploadImgService;
 import com.nchowf.tutorlinking.utils.enums.ErrorCode;
@@ -24,7 +25,7 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
-public class TutorService implements UserService<TutorRequest, TutorResponse> {
+public class TutorService implements UserService<TutorRequest, TutorUpdateRequest, TutorResponse> {
     private final TutorRepo tutorRepo;
     private final SubjectRepo subjectRepo;
     private final GradeRepo gradeRepo;
@@ -82,7 +83,7 @@ public class TutorService implements UserService<TutorRequest, TutorResponse> {
     }
 
     @Override
-    public TutorResponse update(Integer id, TutorRequest request) {
+    public TutorResponse update(Integer id, TutorUpdateRequest request) {
         return null;
     }
 
