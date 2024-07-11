@@ -1,6 +1,7 @@
 package com.nchowf.tutorlinking.tutor;
 
 import com.nchowf.tutorlinking.tutor.dto.TutorRequest;
+import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import com.nchowf.tutorlinking.utils.enums.Gender;
 import com.nchowf.tutorlinking.utils.enums.Position;
 import org.mapstruct.Mapper;
@@ -18,6 +19,26 @@ public interface TutorMapper {
         return position == 0 ? Position.STUDENT :
                 (position == 1 ? Position.TEACHER : Position.GRADUATED_STUDENT);
     }
+    @Named("genderToString")
+    static String genderToString(Gender gender) {
+        return gender != null ? gender.value() : null;
+    }
+    @Named("positionToString")
+    static String positionToString(Position position) {
+        return position != null ? position.value() : null;
+    }
+//    @Named("subjectsToString")
+//    static Set<String> subjectsToString(Set<Subject> subjects){
+//        Set<String> subjectNames = new HashSet<>();
+//        subjects.forEach(subject -> subjectNames.add(subject.getName()));
+//        return subjectNames;
+//    }
+//    @Named("gradesToString")
+//    static Set<String> gradesToString(Set<Grade> grades){
+//        Set<String> gradeNames = new HashSet<>();
+//        grades.forEach(grade -> gradeNames.add(grade.getName()));
+//        return gradeNames;
+//    }
     @Mapping(target = "subjects", ignore = true)
     @Mapping(target = "grades", ignore = true)
     @Mapping(target = "avt", ignore = true)
@@ -25,5 +46,7 @@ public interface TutorMapper {
     @Mapping(target = "gender", source = "gender", qualifiedByName = "intToGender")
     @Mapping(target = "position", source = "position", qualifiedByName = "intToPosition")
     Tutor toTutor(TutorRequest request);
-    //TutorResponse tuTutorResponse(Tutor tutor);
+    @Mapping(target = "gender", source = "gender", qualifiedByName = "genderToString")
+    @Mapping(target = "position", source = "position", qualifiedByName = "positionToString")
+    TutorResponse tuTutorResponse(Tutor tutor);
 }

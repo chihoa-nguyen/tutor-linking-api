@@ -46,4 +46,5 @@ public class Tutor extends User {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name ="tutor_grade")
     private Set<Grade> grades;
+    private String description;
 }

@@ -35,11 +35,11 @@ public class TutorRequest extends UserRequest {
     @Max(value = 2, message = "Chức vụ là 0 (Sinh viên), 1 (Giáo viên) hoặc là 2 (Sinh viên tốt nghiệp)")
     private int position;
     @NotEmpty(message = "Số môn học tối thiểu là 1")
-    private Set<String> subjects;
+    private Set<Integer> subjects;
     @NotEmpty(message = "Số khối học tối thiểu là 1")
-    private Set<String> grades;
+    private Set<Integer> grades;
     @NotEmpty(message = "Khu vực dạy tối thiểu là 1")
     private Set<String> teachingArea;
     @NotBlank(message = "Mô tả ưu điểm không được thiếu")
-    private String desc;
+    private String description;
 }

@@ -22,11 +22,9 @@ public class TutorResponse extends UserResponse {
     private Set<SubjectResponse> subjects;
     private Set<GradeResponse> grades;
     private Set<String> teachingArea;
-    private String desc;
-    public TutorResponse() {
-        super();
-    }
-    public TutorResponse(Integer id, String email, String name, String phoneNumber, String address, Date createdAt, Date updatedAt, String birthday, String gender, String avt, String degree, String university_name, String major, String position, Set<SubjectResponse> subjects, Set<GradeResponse> grades, Set<String> teachingArea, String desc) {
+    private String description;
+
+    public TutorResponse(Integer id, String email, String name, String phoneNumber, String address, Date createdAt, Date updatedAt, String birthday, String gender, String avt, String degree, String university_name, String major, String position, Set<SubjectResponse> subjects, Set<GradeResponse> grades, Set<String> teachingArea, String description) {
         super(id, email, name, phoneNumber, address, createdAt, updatedAt);
         this.birthday = birthday;
         this.gender = gender;
@@ -38,7 +36,7 @@ public class TutorResponse extends UserResponse {
         this.subjects = subjects;
         this.grades = grades;
         this.teachingArea = teachingArea;
-        this.desc = desc;
+        this.description = description;
     }
 
 }
