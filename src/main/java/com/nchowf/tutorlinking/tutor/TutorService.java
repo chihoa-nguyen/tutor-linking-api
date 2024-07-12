@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.tutor;
 
+import com.nchowf.tutorlinking.enums.Role;
 import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.grade.Grade;
 import com.nchowf.tutorlinking.grade.GradeRepo;
@@ -46,6 +47,7 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         File[] files = prepareFileToUpload(request);
         String[] url = uploadFileToDrive(files[0], files[1]);
         Tutor tutor = tutorMapper.toTutor(request);
+        tutor.setRole(Role.TUTOR);
         tutor.setSubjects(new HashSet<>(subjects));
         tutor.setGrades(new HashSet<>(grades));
         tutor.setAvt(url[0]);

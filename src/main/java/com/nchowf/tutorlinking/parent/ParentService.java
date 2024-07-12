@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.parent;
 
+import com.nchowf.tutorlinking.enums.Role;
 import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.parent.dto.ParentRequest;
 import com.nchowf.tutorlinking.parent.dto.ParentResponse;
@@ -26,6 +27,7 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
         if (parentRepo.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         Parent parent = parentMapper.toParent(request);
+        parent.setRole(Role.PARENT);
         parent.setPassword(passwordEncoder.encode(request.getPassword()));
         return parentMapper.toParentResponse(parentRepo
                 .save(parent));
