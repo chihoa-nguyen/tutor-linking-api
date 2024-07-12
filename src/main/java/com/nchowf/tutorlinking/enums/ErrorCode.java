@@ -24,9 +24,10 @@ public enum ErrorCode {
     GRADE_EXISTED(1013,"Khối học đã tồn tại !",HttpStatus.BAD_REQUEST ),
     GRADE_NOT_FOUND(1014,"Khối học không tồn tại",HttpStatus.NOT_FOUND ),
     BOOK_NOT_FOUND(1015,"Book not existed",HttpStatus.NOT_FOUND),
-    PASSWORD_WRONG(1016,"Invalid password" , HttpStatus.BAD_REQUEST),
+    PASSWORD_WRONG(1016,"Mật khảu không chính xác" , HttpStatus.BAD_REQUEST),
     PHONE_NUMBER_USED(1018,"Số điện thoại này đã tồn tại trong hệ thống", HttpStatus.BAD_REQUEST),
-    CLASS_NOT_FOUND(1019,"Lớp học không tồn tại trong hệ thống" , HttpStatus.NOT_FOUND);
+    CLASS_NOT_FOUND(1019,"Lớp học không tồn tại trong hệ thống" , HttpStatus.NOT_FOUND),
+    EMAIL_NOT_FOUND(1020,"Email không tồn tại" , HttpStatus.NOT_FOUND);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

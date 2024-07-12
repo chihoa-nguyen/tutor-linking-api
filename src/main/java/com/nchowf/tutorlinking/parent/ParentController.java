@@ -1,9 +1,12 @@
 package com.nchowf.tutorlinking.parent;
 
+import com.nchowf.tutorlinking.auth.AuthRequest;
+import com.nchowf.tutorlinking.auth.AuthResponse;
 import com.nchowf.tutorlinking.parent.dto.ParentRequest;
 import com.nchowf.tutorlinking.parent.dto.ParentResponse;
 import com.nchowf.tutorlinking.parent.dto.ParentUpdateRequest;
 import com.nchowf.tutorlinking.utils.ApiResponse;
+import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,12 +20,20 @@ import java.util.List;
 public class ParentController {
     private final ParentService parentService;
 
-    @PostMapping("")
+    @PostMapping("/register")
     @ResponseStatus(value = HttpStatus.CREATED)
     public ApiResponse<ParentResponse> add(@RequestBody @Valid ParentRequest parentRequest) {
         return ApiResponse.<ParentResponse>builder()
                 .message("Tạo mới phụ huynh thành công")
                 .data(parentService.register(parentRequest))
+                .build();
+    }
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<AuthResponse> login(@RequestBody @Valid AuthRequest request) throws JOSEException {
+        return ApiResponse.<AuthResponse>builder()
+                .message("Đăng nhập thành công")
+                .data(parentService.authenticate(request))
                 .build();
     }
 

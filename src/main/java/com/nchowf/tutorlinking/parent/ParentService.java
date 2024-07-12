@@ -1,12 +1,16 @@
 package com.nchowf.tutorlinking.parent;
 
+import com.nchowf.tutorlinking.auth.AuthRequest;
+import com.nchowf.tutorlinking.auth.AuthResponse;
+import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Role;
 import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.parent.dto.ParentRequest;
 import com.nchowf.tutorlinking.parent.dto.ParentResponse;
 import com.nchowf.tutorlinking.parent.dto.ParentUpdateRequest;
+import com.nchowf.tutorlinking.token.JwtService;
 import com.nchowf.tutorlinking.user.UserService;
-import com.nchowf.tutorlinking.enums.ErrorCode;
+import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +22,7 @@ import java.util.List;
 public class ParentService implements UserService<ParentRequest,ParentUpdateRequest,ParentResponse> {
     private final ParentRepo parentRepo;
     private final ParentMapper parentMapper;
+    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -31,6 +36,20 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
         parent.setPassword(passwordEncoder.encode(request.getPassword()));
         return parentMapper.toParentResponse(parentRepo
                 .save(parent));
+    }
+
+    @Override
+    public AuthResponse authenticate(AuthRequest request) throws JOSEException {
+        Parent parent = parentRepo.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
+        if (!passwordEncoder.matches(request.getPassword(), parent.getPassword())) {
+            throw new AppException(ErrorCode.PASSWORD_WRONG);
+        }
+        String token = jwtService.generateToken(parent);
+        return AuthResponse.builder()
+                .token(token)
+                .isAuthenticated(true)
+                .build();
     }
     @Override
     public ParentResponse getById(Integer id) {

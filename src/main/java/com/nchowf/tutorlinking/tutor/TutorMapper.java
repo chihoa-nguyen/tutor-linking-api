@@ -41,6 +41,7 @@ public interface TutorMapper {
 //        grades.forEach(grade -> gradeNames.add(grade.getName()));
 //        return gradeNames;
 //    }
+    @Mapping(target = "password", ignore = true)
     @Mapping(target = "subjects", ignore = true)
     @Mapping(target = "grades", ignore = true)
     @Mapping(target = "avt", ignore = true)

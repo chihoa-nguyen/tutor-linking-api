@@ -1,9 +1,12 @@
 package com.nchowf.tutorlinking.tutor;
 
+import com.nchowf.tutorlinking.auth.AuthRequest;
+import com.nchowf.tutorlinking.auth.AuthResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorRequest;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorUpdateRequest;
 import com.nchowf.tutorlinking.utils.ApiResponse;
+import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,14 @@ public class TutorController{
         return ApiResponse.<TutorResponse>builder()
                 .message("Tạo mới gia sư thành công")
                 .data(tutorService.register(request))
+                .build();
+    }
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<AuthResponse> login(@RequestBody @Valid AuthRequest request) throws JOSEException {
+        return ApiResponse.<AuthResponse>builder()
+                .message("Đăng nhập thành công")
+                .data(tutorService.authenticate(request))
                 .build();
     }
     @GetMapping("")

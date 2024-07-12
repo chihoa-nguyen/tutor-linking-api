@@ -1,19 +1,24 @@
 package com.nchowf.tutorlinking.tutor;
 
+import com.nchowf.tutorlinking.auth.AuthRequest;
+import com.nchowf.tutorlinking.auth.AuthResponse;
+import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Role;
 import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.grade.Grade;
 import com.nchowf.tutorlinking.grade.GradeRepo;
 import com.nchowf.tutorlinking.subject.Subject;
 import com.nchowf.tutorlinking.subject.SubjectRepo;
+import com.nchowf.tutorlinking.token.JwtService;
 import com.nchowf.tutorlinking.tutor.dto.TutorRequest;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorUpdateRequest;
 import com.nchowf.tutorlinking.user.UserService;
 import com.nchowf.tutorlinking.utils.UploadImgService;
-import com.nchowf.tutorlinking.enums.ErrorCode;
+import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -32,10 +37,13 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     private final GradeRepo gradeRepo;
     private final UploadImgService uploadImgService;
     private final TutorMapper tutorMapper;
+    private final PasswordEncoder passwordEncoder;
     @Value("${gg-driver.avt-folder-id}")
     private String AVT_FOLDER_ID;
     @Value("${gg-driver.degree-folder-id}")
     private String DEGREE_FOLDER_ID;
+    private final JwtService jwtService;
+
     @Override
     public TutorResponse register(TutorRequest request) throws IOException, ExecutionException, InterruptedException {
         if (tutorRepo.existsByPhoneNumber(request.getPhoneNumber()))
@@ -48,12 +56,29 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         String[] url = uploadFileToDrive(files[0], files[1]);
         Tutor tutor = tutorMapper.toTutor(request);
         tutor.setRole(Role.TUTOR);
+        tutor.setPassword(passwordEncoder.encode(request.getPassword()));
         tutor.setSubjects(new HashSet<>(subjects));
         tutor.setGrades(new HashSet<>(grades));
         tutor.setAvt(url[0]);
         tutor.setDegree(url[1]);
         return tutorMapper.tuTutorResponse(tutorRepo.save(tutor));
     }
+
+    @Override
+    public AuthResponse authenticate(AuthRequest request) throws JOSEException {
+        Tutor tutor = tutorRepo.findByEmail(request.getEmail())
+                .orElseThrow(()-> new AppException(ErrorCode.EMAIL_NOT_FOUND));
+
+        if (!passwordEncoder.matches(request.getPassword(), tutor.getPassword())) {
+            throw new AppException(ErrorCode.PASSWORD_WRONG);
+        }
+        String token = jwtService.generateToken(tutor);
+        return AuthResponse.builder()
+                .token(token)
+                .isAuthenticated(true)
+                .build();
+    }
+
     private File[] prepareFileToUpload(TutorRequest request) throws IOException {
         File tempAvtFile = File.createTempFile("avt_", null);
         File tempDegreeFile = File.createTempFile("degree_", null);
