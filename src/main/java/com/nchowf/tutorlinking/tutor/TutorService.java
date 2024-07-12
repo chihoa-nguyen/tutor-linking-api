@@ -52,7 +52,6 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         tutor.setDegree(url[1]);
         return tutorMapper.tuTutorResponse(tutorRepo.save(tutor));
     }
-
     private File[] prepareFileToUpload(TutorRequest request) throws IOException {
         File tempAvtFile = File.createTempFile("avt_", null);
         File tempDegreeFile = File.createTempFile("degree_", null);
