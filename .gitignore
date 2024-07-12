@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+drive_api_config.json

@@ -26,7 +26,7 @@ public class UploadImgService {
     private String ROOT_URL;
     private static String getPathToGoogleCredentials() {
         String currentDirectory = System.getProperty("user.dir");
-        Path filePath = Paths.get(currentDirectory, "gg-drive-api-config.json");
+        Path filePath = Paths.get(currentDirectory, "drive_api_config.json");
         return filePath.toString();
     }
 

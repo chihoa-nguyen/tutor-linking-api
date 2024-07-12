@@ -2,9 +2,6 @@ server:
   port: 8080
   servlet:
     context-path: /api/v1
-    multipart:
-      max-file-size: 15MB
-      max-request-size: 15MB
   tomcat:
     max-swallow-size: 100MB
 spring:
@@ -25,6 +22,6 @@ jwt:
   refreshable-time: 259200 # in seconds
 gg-driver:
   root-url: "https://drive.google.com/uc?export=view&id="
-  avt-folder-id: "1o93q5Q_sPICBTu9g9hhJi_-jcfuR9uuf"
-  degree-folder-id: "1eaDnJJiGjHS3Pi5hZNKiWLK4XUhxSQr_"
+  avt-folder-id: "1mymQUalzbrRICbe1-PNEJeUu75xsE9uV"
+  degree-folder-id: "15YCQUW-p617aC4LhRWWiBgeN9ANwptbl"
 
