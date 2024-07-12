@@ -3,12 +3,14 @@ package com.nchowf.tutorlinking.class_registration;
 import com.nchowf.tutorlinking.classes.Class;
 import com.nchowf.tutorlinking.tutor.Tutor;
 import com.nchowf.tutorlinking.utils.AbstractEntity;
-import com.nchowf.tutorlinking.utils.enums.Status;
+import com.nchowf.tutorlinking.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

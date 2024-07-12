@@ -1,4 +1,4 @@
-package com.nchowf.tutorlinking.utils.enums;
+package com.nchowf.tutorlinking.enums;
 
 public enum Gender {
     MALE("Nam"), FEMALE("Nữ"), NONE("Không yêu cầu");

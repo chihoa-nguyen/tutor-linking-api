@@ -10,7 +10,7 @@ import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorUpdateRequest;
 import com.nchowf.tutorlinking.user.UserService;
 import com.nchowf.tutorlinking.utils.UploadImgService;
-import com.nchowf.tutorlinking.utils.enums.ErrorCode;
+import com.nchowf.tutorlinking.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

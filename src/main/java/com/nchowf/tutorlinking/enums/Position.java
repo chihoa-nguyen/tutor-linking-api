@@ -1,4 +1,4 @@
-package com.nchowf.tutorlinking.utils.enums;
+package com.nchowf.tutorlinking.enums;
 
 public enum Position {
     STUDENT("Sinh viên"),TEACHER("Giáo viên"), GRADUATED_STUDENT("Sinh viên tốt nghiệp");

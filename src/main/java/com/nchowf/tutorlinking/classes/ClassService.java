@@ -9,7 +9,7 @@ import com.nchowf.tutorlinking.parent.Parent;
 import com.nchowf.tutorlinking.parent.ParentRepo;
 import com.nchowf.tutorlinking.subject.Subject;
 import com.nchowf.tutorlinking.subject.SubjectRepo;
-import com.nchowf.tutorlinking.utils.enums.ErrorCode;
+import com.nchowf.tutorlinking.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

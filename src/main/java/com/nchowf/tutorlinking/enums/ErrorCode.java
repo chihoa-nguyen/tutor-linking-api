@@ -1,4 +1,4 @@
-package com.nchowf.tutorlinking.utils.enums;
+package com.nchowf.tutorlinking.enums;
 
 
 import lombok.Getter;

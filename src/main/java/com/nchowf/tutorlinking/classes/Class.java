@@ -4,15 +4,17 @@ import com.nchowf.tutorlinking.grade.Grade;
 import com.nchowf.tutorlinking.parent.Parent;
 import com.nchowf.tutorlinking.subject.Subject;
 import com.nchowf.tutorlinking.utils.AbstractEntity;
-import com.nchowf.tutorlinking.utils.enums.Gender;
-import com.nchowf.tutorlinking.utils.enums.Position;
+import com.nchowf.tutorlinking.enums.Gender;
+import com.nchowf.tutorlinking.enums.Position;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @AllArgsConstructor
