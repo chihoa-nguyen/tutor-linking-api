@@ -33,7 +33,8 @@ public class SecurityConfig {
                 )
                 .oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(jwtConfigurer ->
-                                jwtConfigurer.decoder(jwtDecoder())))
+                                jwtConfigurer.decoder(jwtDecoder()))
+                                        .authenticationEntryPoint(new JwtAuthEntryPoint()))
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults());
         return http.build();
