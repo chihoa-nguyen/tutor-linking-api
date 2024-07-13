@@ -18,4 +18,5 @@ public abstract class User extends AbstractEntity {
     private String email;
     private String password;
     private Role role;
+    private boolean isEnable = false;
 }

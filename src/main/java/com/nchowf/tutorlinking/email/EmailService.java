@@ -1,4 +1,4 @@
-package com.nchowf.tutorlinking.utils;
+package com.nchowf.tutorlinking.email;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;

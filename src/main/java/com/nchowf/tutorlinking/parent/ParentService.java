@@ -10,7 +10,7 @@ import com.nchowf.tutorlinking.parent.dto.ParentResponse;
 import com.nchowf.tutorlinking.parent.dto.ParentUpdateRequest;
 import com.nchowf.tutorlinking.token.JwtService;
 import com.nchowf.tutorlinking.user.UserService;
-import com.nchowf.tutorlinking.utils.EmailService;
+import com.nchowf.tutorlinking.email.EmailService;
 import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,7 +44,7 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
 
     @Override
     public AuthResponse authenticate(AuthRequest request) throws JOSEException {
-        Parent parent = parentRepo.findByEmail(request.getEmail())
+        Parent parent = parentRepo.findByEmailAndIsEnableTrue(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
         if (!passwordEncoder.matches(request.getPassword(), parent.getPassword())) {
             throw new AppException(ErrorCode.PASSWORD_WRONG);
@@ -64,7 +64,7 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
 
     @Override
     public List<ParentResponse> getAll() {
-        return parentRepo.findAll().stream()
+        return parentRepo.findAllByIsEnableTrue().stream()
                 .map(parentMapper::toParentResponse).toList();
     }
     @Override
