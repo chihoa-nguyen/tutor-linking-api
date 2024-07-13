@@ -28,6 +28,10 @@ public class ParentController {
                 .data(parentService.register(parentRequest))
                 .build();
     }
+    @GetMapping("/verify")
+    public String verify(@RequestParam String token){
+        return parentService.verifyEmail(token);
+    }
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<AuthResponse> login(@RequestBody @Valid AuthRequest request) throws JOSEException {

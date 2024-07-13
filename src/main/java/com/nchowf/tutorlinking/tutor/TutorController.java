@@ -21,13 +21,17 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 public class TutorController{
     private final TutorService tutorService;
-    @PostMapping("")
+    @PostMapping("/register")
     @ResponseStatus(value = HttpStatus.CREATED)
     public ApiResponse<TutorResponse> add(@ModelAttribute @Valid TutorRequest request) throws IOException, ExecutionException, InterruptedException {
         return ApiResponse.<TutorResponse>builder()
                 .message("Tạo mới gia sư thành công")
                 .data(tutorService.register(request))
                 .build();
+    }
+    @GetMapping("/verify")
+    public String verify(@RequestParam String token){
+        return tutorService.verifyEmail(token);
     }
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)

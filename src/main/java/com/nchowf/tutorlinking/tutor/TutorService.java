@@ -2,6 +2,7 @@ package com.nchowf.tutorlinking.tutor;
 
 import com.nchowf.tutorlinking.auth.AuthRequest;
 import com.nchowf.tutorlinking.auth.AuthResponse;
+import com.nchowf.tutorlinking.email.EmailService;
 import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Role;
 import com.nchowf.tutorlinking.exception.AppException;
@@ -10,6 +11,8 @@ import com.nchowf.tutorlinking.grade.GradeRepo;
 import com.nchowf.tutorlinking.subject.Subject;
 import com.nchowf.tutorlinking.subject.SubjectRepo;
 import com.nchowf.tutorlinking.token.JwtService;
+import com.nchowf.tutorlinking.token.VerificationToken;
+import com.nchowf.tutorlinking.token.VerificationTokenRepo;
 import com.nchowf.tutorlinking.tutor.dto.TutorRequest;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorUpdateRequest;
@@ -35,7 +38,9 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     private final TutorRepo tutorRepo;
     private final SubjectRepo subjectRepo;
     private final GradeRepo gradeRepo;
+    private final VerificationTokenRepo tokenRepo;
     private final UploadImgService uploadImgService;
+    private final EmailService emailService;
     private final TutorMapper tutorMapper;
     private final PasswordEncoder passwordEncoder;
     @Value("${gg-driver.avt-folder-id}")
@@ -61,13 +66,29 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         tutor.setGrades(new HashSet<>(grades));
         tutor.setAvt(url[0]);
         tutor.setDegree(url[1]);
-        return tutorMapper.tuTutorResponse(tutorRepo.save(tutor));
+        tutorRepo.save(tutor);
+        VerificationToken token = new VerificationToken(tutor.getId(), Role.TUTOR);
+        tokenRepo.save(token);
+        emailService.sendVerificationMail(tutor.getName(), tutor.getEmail(),
+                token.getToken(), "tutor");
+        return tutorMapper.tuTutorResponse(tutorRepo
+                .save(tutor));
+    }
+
+    @Override
+    public String verifyEmail(String token) {
+        VerificationToken verificationToken = tokenRepo.findByTokenAndRole(token, Role.TUTOR);
+        Tutor tutor = tutorRepo.findById(verificationToken.getUserId())
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+        tutor.setEnable(true);
+        tutorRepo.save(tutor);
+        return "<h2>Tài khoản của bản đã được kích hoạt</h2>";
     }
 
     @Override
     public AuthResponse authenticate(AuthRequest request) throws JOSEException {
         Tutor tutor = tutorRepo.findByEmail(request.getEmail())
-                .orElseThrow(()-> new AppException(ErrorCode.EMAIL_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
 
         if (!passwordEncoder.matches(request.getPassword(), tutor.getPassword())) {
             throw new AppException(ErrorCode.PASSWORD_WRONG);
@@ -79,6 +100,7 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
                 .build();
     }
 
+
     private File[] prepareFileToUpload(TutorRequest request) throws IOException {
         File tempAvtFile = File.createTempFile("avt_", null);
         File tempDegreeFile = File.createTempFile("degree_", null);
@@ -86,6 +108,7 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         request.getDegree().transferTo(tempDegreeFile);
         return new File[]{tempAvtFile, tempDegreeFile};
     }
+
     private String[] uploadFileToDrive(File tempImgFile, File tempEBookFile) throws ExecutionException, InterruptedException {
         CompletableFuture<String> avtUploadFuture = CompletableFuture.supplyAsync(() -> {
             try {
@@ -129,7 +152,7 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     @Override
     public TutorResponse getById(Integer id) {
         Tutor tutor = tutorRepo.findById(id)
-                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         return tutorMapper.tuTutorResponse(tutor);
     }
 
@@ -142,7 +165,7 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     @Override
     public void delete(Integer id) {
         Tutor tutor = tutorRepo.findById(id)
-                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         tutorRepo.delete(tutor);
     }
 }

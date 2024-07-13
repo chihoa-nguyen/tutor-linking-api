@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 public interface UserService<T extends UserRequest, U extends UserUpdateRequest, R extends UserResponse> {
     R register(T request) throws IOException, ExecutionException, InterruptedException;
     AuthResponse authenticate(AuthRequest request) throws JOSEException;
+    String verifyEmail(String token);
     R update(Integer id, U request);
     R getById(Integer id);
     List<R> getAll();

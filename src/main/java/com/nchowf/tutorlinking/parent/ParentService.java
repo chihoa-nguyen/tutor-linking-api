@@ -9,6 +9,8 @@ import com.nchowf.tutorlinking.parent.dto.ParentRequest;
 import com.nchowf.tutorlinking.parent.dto.ParentResponse;
 import com.nchowf.tutorlinking.parent.dto.ParentUpdateRequest;
 import com.nchowf.tutorlinking.token.JwtService;
+import com.nchowf.tutorlinking.token.VerificationToken;
+import com.nchowf.tutorlinking.token.VerificationTokenRepo;
 import com.nchowf.tutorlinking.user.UserService;
 import com.nchowf.tutorlinking.email.EmailService;
 import com.nimbusds.jose.JOSEException;
@@ -25,6 +27,7 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
     private final ParentMapper parentMapper;
     private final JwtService jwtService;
     private final EmailService emailService;
+    private final VerificationTokenRepo tokenRepo;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -36,8 +39,11 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
         Parent parent = parentMapper.toParent(request);
         parent.setRole(Role.PARENT);
         parent.setPassword(passwordEncoder.encode(request.getPassword()));
-        emailService.send(parent.getName(),
-                parent.getEmail());
+        parentRepo.save(parent);
+        VerificationToken token = new VerificationToken(parent.getId(), Role.PARENT);
+        tokenRepo.save(token);
+        emailService.sendVerificationMail(parent.getName(),"parent",
+                parent.getEmail(), token.getToken());
         return parentMapper.toParentResponse(parentRepo
                 .save(parent));
     }
@@ -55,6 +61,17 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
                 .isAuthenticated(true)
                 .build();
     }
+
+    @Override
+    public String verifyEmail(String token) {
+        VerificationToken verificationToken = tokenRepo.findByTokenAndRole(token, Role.PARENT);
+        Parent parent = parentRepo.findById(verificationToken.getUserId())
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+        parent.setEnable(true);
+        parentRepo.save(parent);
+        return "<h2>Tài khoản của bản đã được kích hoạt</h2>";
+    }
+
     @Override
     public ParentResponse getById(Integer id) {
         Parent parent = parentRepo.findById(id)
