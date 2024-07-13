@@ -10,6 +10,7 @@ import com.nchowf.tutorlinking.parent.dto.ParentResponse;
 import com.nchowf.tutorlinking.parent.dto.ParentUpdateRequest;
 import com.nchowf.tutorlinking.token.JwtService;
 import com.nchowf.tutorlinking.user.UserService;
+import com.nchowf.tutorlinking.utils.EmailService;
 import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +24,7 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
     private final ParentRepo parentRepo;
     private final ParentMapper parentMapper;
     private final JwtService jwtService;
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -34,6 +36,8 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
         Parent parent = parentMapper.toParent(request);
         parent.setRole(Role.PARENT);
         parent.setPassword(passwordEncoder.encode(request.getPassword()));
+        emailService.send(parent.getName(),
+                parent.getEmail());
         return parentMapper.toParentResponse(parentRepo
                 .save(parent));
     }
