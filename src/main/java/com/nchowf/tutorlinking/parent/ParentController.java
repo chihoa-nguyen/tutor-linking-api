@@ -58,6 +58,14 @@ public class ParentController {
                 .data(parentService.getById(id))
                 .build();
     }
+    @GetMapping("/infor")
+    @ResponseStatus(value = HttpStatus.FOUND)
+    public ApiResponse<ParentResponse> getInfor() {
+        return ApiResponse.<ParentResponse>builder()
+                .message("Lấy thông tin của phụ huynh thành công")
+                .data(parentService.getInforByToken())
+                .build();
+    }
 
     @PutMapping("/{id}")
     @ResponseStatus(value = HttpStatus.OK)

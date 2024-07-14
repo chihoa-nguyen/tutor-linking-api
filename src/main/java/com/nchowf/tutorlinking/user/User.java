@@ -1,6 +1,7 @@
 package com.nchowf.tutorlinking.user;
 
 import com.nchowf.tutorlinking.enums.Role;
+import com.nchowf.tutorlinking.user.dto.UserResponse;
 import com.nchowf.tutorlinking.utils.AbstractEntity;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;

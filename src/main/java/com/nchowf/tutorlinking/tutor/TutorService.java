@@ -21,6 +21,7 @@ import com.nchowf.tutorlinking.utils.UploadImgService;
 import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -87,7 +88,7 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
 
     @Override
     public AuthResponse authenticate(AuthRequest request) throws JOSEException {
-        Tutor tutor = tutorRepo.findByEmail(request.getEmail())
+        Tutor tutor = tutorRepo.findByEmailAndIsEnableTrue(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
 
         if (!passwordEncoder.matches(request.getPassword(), tutor.getPassword())) {
@@ -153,6 +154,13 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     public TutorResponse getById(Integer id) {
         Tutor tutor = tutorRepo.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        return tutorMapper.tuTutorResponse(tutor);
+    }
+
+    @Override
+    public TutorResponse getInforByToken() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Tutor tutor = tutorRepo.findByEmailAndIsEnableTrue(email).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
         return tutorMapper.tuTutorResponse(tutor);
     }
 

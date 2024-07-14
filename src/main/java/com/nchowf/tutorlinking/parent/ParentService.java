@@ -2,6 +2,7 @@ package com.nchowf.tutorlinking.parent;
 
 import com.nchowf.tutorlinking.auth.AuthRequest;
 import com.nchowf.tutorlinking.auth.AuthResponse;
+import com.nchowf.tutorlinking.email.EmailService;
 import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Role;
 import com.nchowf.tutorlinking.exception.AppException;
@@ -12,9 +13,9 @@ import com.nchowf.tutorlinking.token.JwtService;
 import com.nchowf.tutorlinking.token.VerificationToken;
 import com.nchowf.tutorlinking.token.VerificationTokenRepo;
 import com.nchowf.tutorlinking.user.UserService;
-import com.nchowf.tutorlinking.email.EmailService;
 import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -76,6 +77,13 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
     public ParentResponse getById(Integer id) {
         Parent parent = parentRepo.findById(id)
                 .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXISTED)));
+        return parentMapper.toParentResponse(parent);
+    }
+
+    @Override
+    public ParentResponse getInforByToken() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Parent parent = parentRepo.findByEmailAndIsEnableTrue(email).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
         return parentMapper.toParentResponse(parent);
     }
 

@@ -58,6 +58,14 @@ public class TutorController{
                 .data(tutorService.getById(id))
                 .build();
     }
+    @GetMapping("/infor")
+    @ResponseStatus(value = HttpStatus.FOUND)
+    public ApiResponse<TutorResponse> getInfor() {
+        return ApiResponse.<TutorResponse>builder()
+                .message("Lấy thông tin gia sư thành công")
+                .data(tutorService.getInforByToken())
+                .build();
+    }
 
     @PutMapping("/{id}")
     @ResponseStatus(value = HttpStatus.OK)

@@ -8,5 +8,5 @@ public interface TutorRepo extends JpaRepository<Tutor, Integer> {
     boolean existsByPhoneNumber(String phoneNumber);
     boolean existsByEmail(String email);
 
-    Optional<Tutor> findByEmail(String email);
+    Optional<Tutor> findByEmailAndIsEnableTrue(String email);
 }

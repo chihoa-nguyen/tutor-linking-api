@@ -17,6 +17,7 @@ public interface UserService<T extends UserRequest, U extends UserUpdateRequest,
     String verifyEmail(String token);
     R update(Integer id, U request);
     R getById(Integer id);
+    R getInforByToken();
     List<R> getAll();
     void delete(Integer id);
 }
