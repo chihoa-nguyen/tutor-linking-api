@@ -31,16 +31,7 @@ public class Class extends AbstractEntity {
 
     @ManyToMany
     @JoinTable(name = "class_subject")
-//            joinColumns = @JoinColumn(
-//                    name = "subject_id",
-//                    referencedColumnName = "subjectId"
-//            ),
-//            inverseJoinColumns = @JoinColumn(
-//                    name = "class_id",
-//                    referencedColumnName = "classId"
-//            ))
     private Set<Subject> subjects;
-
     @ManyToOne(
             cascade = CascadeType.DETACH
     )
@@ -49,19 +40,15 @@ public class Class extends AbstractEntity {
             referencedColumnName = "id"
     )
     private Grade grade;
-
     private int fee;
-
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(
             name = "parent_id",
             referencedColumnName = "id"
     )
     private Parent parent;
-
     @Enumerated(EnumType.STRING)
     private Position positionRequired;
-
     @Enumerated(EnumType.STRING)
     private Gender genderRequired;
     @Lob()

@@ -40,11 +40,11 @@ public class ClassService {
         return classRepo.findAll().stream()
                .map(classMapper::toClassResponse).toList();
     }
-    public ClassResponse getById(Long id){
+    public ClassResponse getById(Integer id){
         return classRepo.findById(id).map(classMapper::toClassResponse)
                .orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
     }
-    public ClassResponse updateClass(Long id, ClassRequest request){
+    public ClassResponse updateClass(Integer id, ClassRequest request){
         Class classroom = classRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
         if(!request.getGradeId().equals(classroom.getGrade().getId())){
             Grade grade = gradeRepo.findById(request.getGradeId())
@@ -56,7 +56,7 @@ public class ClassService {
         classroom.setSubjects(new HashSet<>(subjects));
         return classMapper.toClassResponse(classRepo.save(classroom));
     }
-    public void deleteClass(Long id){
+    public void deleteClass(Integer id){
         classRepo.deleteById(id);
     }
 }

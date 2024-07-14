@@ -26,17 +26,17 @@ public class ClassController {
     }
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
-    public ClassResponse getById(@PathVariable("id") Long id){
+    public ClassResponse getById(@PathVariable("id") Integer id){
         return classService.getById(id);
     }
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ClassResponse updateById(@PathVariable("id") Long id, @RequestBody @Valid ClassRequest request){
+    public ClassResponse updateById(@PathVariable("id") Integer id, @RequestBody @Valid ClassRequest request){
         return classService.updateClass(id, request);
     }
     @DeleteMapping("/{id}")
     @ResponseStatus(value=HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") Integer id) {
         classService.deleteClass(id);
     }
 }

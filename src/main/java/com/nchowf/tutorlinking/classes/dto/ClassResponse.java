@@ -5,13 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ClassResponse {
-    private Long classId;
+    private Integer id;
     private Integer parentId;
     private Set<String> subjects;
     private Integer numberSession;
@@ -22,4 +23,6 @@ public class ClassResponse {
     private String positionRequired;
     private String genderRequired;
     private String note;
+    private Date createdAt;
+    private Date updatedAt;
 }
