@@ -67,12 +67,12 @@ public class TutorController{
                 .build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("")
     @ResponseStatus(value = HttpStatus.OK)
-    public ApiResponse<TutorResponse> update(@PathVariable("id") Integer id, @RequestBody @Valid TutorUpdateRequest request) {
+    public ApiResponse<TutorResponse> update(@RequestBody @Valid TutorUpdateRequest request) {
         return ApiResponse.<TutorResponse>builder()
                 .message("Cập nhật thông tin thành công")
-                .data(tutorService.update(id, request))
+                .data(tutorService.update(request))
                 .build();
     }
 

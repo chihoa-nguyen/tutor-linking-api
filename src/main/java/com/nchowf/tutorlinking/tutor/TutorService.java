@@ -133,10 +133,10 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     }
 
     @Override
-    public TutorResponse update(Integer id, TutorUpdateRequest request) {
+    public TutorResponse update(TutorUpdateRequest request) {
         if (tutorRepo.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_NUMBER_USED);
-        Tutor tutor = tutorRepo.findById(id)
+        Tutor tutor = tutorRepo.findByEmailAndIsEnableTrue(getEmailFromToken())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         List<Subject> subjects = subjectRepo.findAllById(request.getSubjects());
         List<Grade> grades = gradeRepo.findAllById(request.getGrades());
@@ -159,9 +159,14 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
 
     @Override
     public TutorResponse getInforByToken() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = getEmailFromToken();
         Tutor tutor = tutorRepo.findByEmailAndIsEnableTrue(email).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
         return tutorMapper.tuTutorResponse(tutor);
+    }
+
+    @Override
+    public String getEmailFromToken() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
     @Override

@@ -15,9 +15,10 @@ public interface UserService<T extends UserRequest, U extends UserUpdateRequest,
     R register(T request) throws IOException, ExecutionException, InterruptedException;
     AuthResponse authenticate(AuthRequest request) throws JOSEException;
     String verifyEmail(String token);
-    R update(Integer id, U request);
+    R update(U request);
     R getById(Integer id);
     R getInforByToken();
+    String getEmailFromToken();
     List<R> getAll();
     void delete(Integer id);
 }

@@ -67,12 +67,12 @@ public class ParentController {
                 .build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("")
     @ResponseStatus(value = HttpStatus.OK)
-    public ApiResponse<ParentResponse> update(@PathVariable("id") Integer id, @RequestBody @Valid ParentUpdateRequest parentRequest) {
+    public ApiResponse<ParentResponse> update(@RequestBody @Valid ParentUpdateRequest parentRequest) {
         return ApiResponse.<ParentResponse>builder()
                 .message("Cập nhật thông tin thành công")
-                .data(parentService.update(id, parentRequest))
+                .data(parentService.update(parentRequest))
                 .build();
     }
 

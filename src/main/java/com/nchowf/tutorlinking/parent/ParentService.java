@@ -82,9 +82,14 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
 
     @Override
     public ParentResponse getInforByToken() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = getEmailFromToken();
         Parent parent = parentRepo.findByEmailAndIsEnableTrue(email).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
         return parentMapper.toParentResponse(parent);
+    }
+
+    @Override
+    public String getEmailFromToken() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
     @Override
@@ -93,8 +98,8 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
                 .map(parentMapper::toParentResponse).toList();
     }
     @Override
-    public ParentResponse update(Integer id, ParentUpdateRequest parentRequest) {
-        Parent parent = parentRepo.findById(id)
+    public ParentResponse update(ParentUpdateRequest parentRequest) {
+        Parent parent = parentRepo.findByEmailAndIsEnableTrue(getEmailFromToken())
                 .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXISTED)));
         parentMapper.toUpdateParent(parent, parentRequest);
         return parentMapper.toParentResponse(parentRepo
