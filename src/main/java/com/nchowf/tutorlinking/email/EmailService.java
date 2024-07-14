@@ -17,7 +17,7 @@ public class EmailService {
     @Async
     public void sendVerificationMail(String name, String to, String token, String userType){
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject("Xác thực email");
+        message.setSubject("Xác thực email cho tài khoản TutorLinking");
         message.setFrom("tutor.linking@gmail.com");
         message.setTo(to);
         message.setText(EmailUtils.getEmailMessage(name, userType ,host, token));

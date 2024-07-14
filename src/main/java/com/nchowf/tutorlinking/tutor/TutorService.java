@@ -82,7 +82,7 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
         tutor.setEnable(true);
         tutorRepo.save(tutor);
-        return "<h2>Tài khoản của bản đã được kích hoạt</h2>";
+        return "<h2>Địa chỉ email " + tutor.getEmail()+" đã được xác minh</h2>";
     }
 
     @Override

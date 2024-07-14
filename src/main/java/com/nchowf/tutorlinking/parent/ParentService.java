@@ -42,8 +42,8 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
         parentRepo.save(parent);
         VerificationToken token = new VerificationToken(parent.getId(), Role.PARENT);
         tokenRepo.save(token);
-        emailService.sendVerificationMail(parent.getName(),"parent",
-                parent.getEmail(), token.getToken());
+        emailService.sendVerificationMail(parent.getName(),
+                parent.getEmail(), token.getToken(),"parent");
         return parentMapper.toParentResponse(parentRepo
                 .save(parent));
     }
@@ -69,7 +69,7 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
         parent.setEnable(true);
         parentRepo.save(parent);
-        return "<h2>Tài khoản của bản đã được kích hoạt</h2>";
+        return "<p>Địa chỉ email " + parent.getEmail() + " đã được xác minh !</p>";
     }
 
     @Override
