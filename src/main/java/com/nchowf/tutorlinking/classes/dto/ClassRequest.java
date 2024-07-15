@@ -13,8 +13,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClassRequest {
-    @NotNull(message = "Id của phụ huynh không được thiếu")
-    private Integer parentId;
     @NotNull(message = "Môn học không được thiếu")
     private Set<Integer> subjects;
     @NotNull(message="Số buổi dạy không được thiếu")

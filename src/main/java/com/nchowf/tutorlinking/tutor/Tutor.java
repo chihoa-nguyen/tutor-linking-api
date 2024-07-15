@@ -1,10 +1,10 @@
 package com.nchowf.tutorlinking.tutor;
 
+import com.nchowf.tutorlinking.enums.Gender;
+import com.nchowf.tutorlinking.enums.Position;
 import com.nchowf.tutorlinking.grade.Grade;
 import com.nchowf.tutorlinking.subject.Subject;
 import com.nchowf.tutorlinking.user.User;
-import com.nchowf.tutorlinking.enums.Gender;
-import com.nchowf.tutorlinking.enums.Position;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

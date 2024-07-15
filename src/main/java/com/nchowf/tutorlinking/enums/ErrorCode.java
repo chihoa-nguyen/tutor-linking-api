@@ -19,7 +19,8 @@ public enum ErrorCode {
     SUBJECT_NOT_FOUND(1021,"Môn học không tồn tại" ,HttpStatus.NOT_FOUND ),
     SUBJECT_EXISTED(1022,"Môn học đã tồn tại" , HttpStatus.BAD_REQUEST),
     GRADE_NOT_FOUND(1023,"Khối học không tồn tại" , HttpStatus.NOT_FOUND ),
-    GRADE_EXISTED(1024,"Khối học đã tồn tại" ,HttpStatus.BAD_REQUEST );
+    GRADE_EXISTED(1024,"Khối học đã tồn tại" ,HttpStatus.BAD_REQUEST ),
+    NOT_YOUR_CLASS(1025,"Lớp học này không phải của bạn" , HttpStatus.BAD_REQUEST);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
