@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.tutor;
 
+import com.nchowf.tutorlinking.class_registration.Registration;
 import com.nchowf.tutorlinking.enums.Gender;
 import com.nchowf.tutorlinking.enums.Position;
 import com.nchowf.tutorlinking.grade.Grade;
@@ -12,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
@@ -47,4 +49,8 @@ public class Tutor extends User {
     @JoinTable(name ="tutor_grade")
     private Set<Grade> grades;
     private String description;
+
+    @OneToMany(mappedBy = "tutor")
+    private Set<Registration> registrations = new LinkedHashSet<>();
+
 }

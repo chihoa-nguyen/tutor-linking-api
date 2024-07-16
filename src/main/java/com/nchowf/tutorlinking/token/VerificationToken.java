@@ -1,7 +1,7 @@
 package com.nchowf.tutorlinking.token;
 
 import com.nchowf.tutorlinking.enums.Role;
-import com.nchowf.tutorlinking.utils.AbstractEntity;
+import com.nchowf.tutorlinking.utils.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class VerificationToken extends AbstractEntity{
+public class VerificationToken extends BaseEntity {
     @Column(nullable = false)
     private String token;
     @Column(nullable = false)
@@ -26,5 +26,4 @@ public class VerificationToken extends AbstractEntity{
         this.token = UUID.randomUUID().toString();
         this.role = role;
     }
-
 }

@@ -3,7 +3,7 @@ package com.nchowf.tutorlinking.classes;
 import com.nchowf.tutorlinking.grade.Grade;
 import com.nchowf.tutorlinking.parent.Parent;
 import com.nchowf.tutorlinking.subject.Subject;
-import com.nchowf.tutorlinking.utils.AbstractEntity;
+import com.nchowf.tutorlinking.utils.BaseEntity;
 import com.nchowf.tutorlinking.enums.Gender;
 import com.nchowf.tutorlinking.enums.Position;
 import jakarta.persistence.*;
@@ -19,7 +19,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Class extends AbstractEntity {
+public class Class extends BaseEntity {
     @Column(
             nullable = false
     )

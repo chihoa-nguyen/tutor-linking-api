@@ -2,7 +2,7 @@ package com.nchowf.tutorlinking.class_registration;
 
 import com.nchowf.tutorlinking.classes.Class;
 import com.nchowf.tutorlinking.tutor.Tutor;
-import com.nchowf.tutorlinking.utils.AbstractEntity;
+import com.nchowf.tutorlinking.utils.BaseEntity;
 import com.nchowf.tutorlinking.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Registration extends AbstractEntity {
+public class Registration extends BaseEntity {
     @ManyToOne()
     @JoinColumn(name = "tutor_id", referencedColumnName = "id")
     private Tutor tutor;

@@ -1,8 +1,7 @@
 package com.nchowf.tutorlinking.user;
 
 import com.nchowf.tutorlinking.enums.Role;
-import com.nchowf.tutorlinking.user.dto.UserResponse;
-import com.nchowf.tutorlinking.utils.AbstractEntity;
+import com.nchowf.tutorlinking.utils.BaseEntity;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class User extends AbstractEntity {
+public abstract class User extends BaseEntity {
     private String name;
     private String email;
     private String password;

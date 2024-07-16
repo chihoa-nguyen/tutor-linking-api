@@ -1,6 +1,6 @@
 package com.nchowf.tutorlinking.grade;
 
-import com.nchowf.tutorlinking.utils.AbstractEntity;
+import com.nchowf.tutorlinking.utils.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
                 columnNames = "name"
         )
 )
-public class Grade extends AbstractEntity {
+public class Grade extends BaseEntity {
     @Column(nullable = false)
     private String name;
 }
