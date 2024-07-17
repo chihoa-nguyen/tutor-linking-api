@@ -2,6 +2,7 @@ package com.nchowf.tutorlinking.classes;
 
 import com.nchowf.tutorlinking.classes.dto.ClassRequest;
 import com.nchowf.tutorlinking.classes.dto.ClassResponse;
+import com.nchowf.tutorlinking.classes.dto.FilterClassRequest;
 import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.grade.Grade;
@@ -61,5 +62,9 @@ public class ClassService {
     }
     public void deleteClass(Integer id){
         classRepo.deleteById(id);
+    }
+    public List<ClassResponse> getClasses(FilterClassRequest request){
+        return classRepo.findAll(request.toSpecification())
+                .stream().map(classMapper::toClassResponse).toList();
     }
 }

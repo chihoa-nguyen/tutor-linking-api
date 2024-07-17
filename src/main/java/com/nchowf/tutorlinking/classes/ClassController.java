@@ -2,6 +2,7 @@ package com.nchowf.tutorlinking.classes;
 
 import com.nchowf.tutorlinking.classes.dto.ClassRequest;
 import com.nchowf.tutorlinking.classes.dto.ClassResponse;
+import com.nchowf.tutorlinking.classes.dto.FilterClassRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,11 @@ public class ClassController {
     @ResponseStatus(HttpStatus.FOUND)
     public List<ClassResponse> getAll(){
         return classService.getAll();
+    }
+    @GetMapping("/filter")
+    @ResponseStatus(HttpStatus.FOUND)
+    public List<ClassResponse> getClasses(@RequestBody FilterClassRequest request){
+        return classService.getClasses(request);
     }
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)

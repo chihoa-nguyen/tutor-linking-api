@@ -26,7 +26,7 @@ public class GradeService {
                 .map(gradeMapper::toGradeResponse).toList();
     }
     public GradeResponse getById(Integer id){
-        return gradeRepo.findById(id).map(gradeMapper::toGradeResponse)
+        return gradeRepo.findById(id).map(gradeMapper ::toGradeResponse)
                .orElseThrow(() -> new AppException(ErrorCode.GRADE_NOT_FOUND));
     }
     public GradeResponse updateGrade(Integer id, GradeRequest request){
