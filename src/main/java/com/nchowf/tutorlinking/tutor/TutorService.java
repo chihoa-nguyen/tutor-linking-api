@@ -49,7 +49,6 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     @Value("${gg-driver.degree-folder-id}")
     private String DEGREE_FOLDER_ID;
     private final JwtService jwtService;
-
     @Override
     public TutorResponse register(TutorRequest request) throws IOException, ExecutionException, InterruptedException {
         if (tutorRepo.existsByPhoneNumber(request.getPhoneNumber()))
@@ -83,9 +82,8 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
         tutor.setEnable(true);
         tutorRepo.save(tutor);
-        return "<h2>Địa chỉ email " + tutor.getEmail()+" đã được xác minh</h2>";
+        return "<p>Địa chỉ email " + tutor.getEmail()+" đã được xác minh</p>";
     }
-
     @Override
     public AuthResponse authenticate(AuthRequest request) throws JOSEException {
         Tutor tutor = tutorRepo.findByEmailAndIsEnableTrue(request.getEmail())
@@ -100,8 +98,6 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
                 .isAuthenticated(true)
                 .build();
     }
-
-
     private File[] prepareFileToUpload(TutorRequest request) throws IOException {
         File tempAvtFile = File.createTempFile("avt_", null);
         File tempDegreeFile = File.createTempFile("degree_", null);
@@ -157,6 +153,11 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         return tutorMapper.tuTutorResponse(tutor);
     }
 
+    public Tutor getThisTutor(){
+        String email = getEmailFromToken();
+        return tutorRepo.findByEmailAndIsEnableTrue(email)
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+    }
     @Override
     public TutorResponse getInforByToken() {
         String email = getEmailFromToken();
