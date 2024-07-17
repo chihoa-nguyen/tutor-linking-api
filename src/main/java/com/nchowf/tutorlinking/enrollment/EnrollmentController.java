@@ -1,4 +1,4 @@
-package com.nchowf.tutorlinking.class_registration;
+package com.nchowf.tutorlinking.enrollment;
 
 import com.nchowf.tutorlinking.utils.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/registration")
 @RequiredArgsConstructor
-public class RegistrationController {
-    private final RegistrationService registrationService;
+public class EnrollmentController {
+    private final EnrollmentService enrollmentService;
     @PostMapping("/tutor/{classId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<RegistrationResponse> add(@PathVariable Integer classId){
-        return ApiResponse.<RegistrationResponse>builder().
+    public ApiResponse<EnrollmentResponse> add(@PathVariable Integer classId){
+        return ApiResponse.<EnrollmentResponse>builder().
                 message("Đăng kí nhận lớp thành công")
-                .data(registrationService.createRegistration(classId))
+                .data(enrollmentService.createRegistration(classId))
                 .build();
     }
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Integer id){
-        registrationService.deleteRegistration(id);
+        enrollmentService.deleteRegistration(id);
     }
 }

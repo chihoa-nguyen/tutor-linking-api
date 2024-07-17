@@ -1,4 +1,4 @@
-package com.nchowf.tutorlinking.class_registration;
+package com.nchowf.tutorlinking.enrollment;
 
 import com.nchowf.tutorlinking.classes.Class;
 import com.nchowf.tutorlinking.classes.ClassRepo;
@@ -12,25 +12,25 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class RegistrationService {
-    private final RegistrationRepo registrationRepo;
+public class EnrollmentService {
+    private final EnrollmentRepo enrollmentRepo;
     private final TutorService tutorService;
     private final ClassRepo classRepo;
-    private final RegistrationMapper registrationMapper;
+    private final EnrollmentMapper enrollmentMapper;
 
-    public RegistrationResponse createRegistration(Integer classId) {
+    public EnrollmentResponse createRegistration(Integer classId) {
         Tutor tutor = tutorService.getThisTutor();
         Class classroom = classRepo.findById(classId)
                 .orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
-        if (registrationRepo.existsByTutorAndClassroom(tutor, classroom)) {
+        if (enrollmentRepo.existsByTutorAndClassroom(tutor, classroom)) {
             throw new AppException(ErrorCode.ALREADY_REGISTERED);
         }
-        Registration registration = Registration.builder()
+        Enrollment enrollment = Enrollment.builder()
                 .classroom(classroom)
                 .tutor(tutor)
                 .status(Status.PENDING)
                 .build();
-        return registrationMapper.toRegistrationResponse(registrationRepo.save(registration));
+        return enrollmentMapper.toRegistrationResponse(enrollmentRepo.save(enrollment));
     }
 
     //        public Registration updateRegistration(Registration registration) throws RegistrationException {
@@ -47,13 +47,13 @@ public class RegistrationService {
 //        }
 //
     public void deleteRegistration(Integer id) {
-        Registration registration = registrationRepo.findById(id)
+        Enrollment enrollment = enrollmentRepo.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.REGISTRATION_NOT_FOUND));
         Tutor tutor = tutorService.getThisTutor();
-        if (!registration.getTutor().equals(tutor)) {
+        if (!enrollment.getTutor().equals(tutor)) {
             throw new AppException(ErrorCode.NOT_YOUR_REGISTRATION);
         }
-        registrationRepo.delete(registration);
+        enrollmentRepo.delete(enrollment);
     }
 }
 

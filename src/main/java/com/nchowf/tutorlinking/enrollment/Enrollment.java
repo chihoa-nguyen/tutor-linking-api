@@ -1,4 +1,4 @@
-package com.nchowf.tutorlinking.class_registration;
+package com.nchowf.tutorlinking.enrollment;
 
 import com.nchowf.tutorlinking.classes.Class;
 import com.nchowf.tutorlinking.tutor.Tutor;
@@ -13,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Builder
-public class Registration extends BaseEntity {
+public class Enrollment extends BaseEntity {
     @ManyToOne()
     @JoinColumn(name = "tutor_id", referencedColumnName = "id")
     private Tutor tutor;

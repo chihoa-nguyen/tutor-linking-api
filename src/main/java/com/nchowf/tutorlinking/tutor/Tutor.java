@@ -1,6 +1,6 @@
 package com.nchowf.tutorlinking.tutor;
 
-import com.nchowf.tutorlinking.class_registration.Registration;
+import com.nchowf.tutorlinking.enrollment.Enrollment;
 import com.nchowf.tutorlinking.enums.Gender;
 import com.nchowf.tutorlinking.enums.Position;
 import com.nchowf.tutorlinking.grade.Grade;
@@ -51,6 +51,6 @@ public class Tutor extends User {
     private String description;
 
     @OneToMany(mappedBy = "tutor")
-    private Set<Registration> registrations = new LinkedHashSet<>();
+    private Set<Enrollment> Enrollments = new LinkedHashSet<>();
 
 }

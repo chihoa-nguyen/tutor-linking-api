@@ -1,6 +1,6 @@
 package com.nchowf.tutorlinking.review;
 
-import com.nchowf.tutorlinking.class_registration.Registration;
+import com.nchowf.tutorlinking.enrollment.Enrollment;
 import com.nchowf.tutorlinking.utils.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Review extends BaseEntity {
     @OneToOne
-    @JoinColumn(name = "register_id", nullable = false)
-    private Registration registration;
+    @JoinColumn(name = "enrollment_id", nullable = false)
+    private Enrollment enrollment;
     private int rating;
     private String comment;
 }

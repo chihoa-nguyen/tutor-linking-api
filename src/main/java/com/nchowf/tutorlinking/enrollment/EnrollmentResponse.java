@@ -1,4 +1,4 @@
-package com.nchowf.tutorlinking.class_registration;
+package com.nchowf.tutorlinking.enrollment;
 
 import com.nchowf.tutorlinking.classes.dto.ClassResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
@@ -11,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RegistrationResponse {
+public class EnrollmentResponse {
     private Integer id;
     private ClassResponse classroom;
     private TutorResponse tutor;
