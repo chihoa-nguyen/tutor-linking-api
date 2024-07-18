@@ -32,6 +32,7 @@ public class Class extends BaseEntity {
     @ManyToMany
     @JoinTable(name = "class_subject")
     private Set<Subject> subjects;
+
     @ManyToOne(
             cascade = CascadeType.DETACH
     )
@@ -41,6 +42,7 @@ public class Class extends BaseEntity {
     )
     private Grade grade;
     private int fee;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(
             name = "parent_id",

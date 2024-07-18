@@ -9,7 +9,7 @@ import com.nchowf.tutorlinking.tutor.Tutor;
 import com.nchowf.tutorlinking.tutor.TutorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class EnrollmentService {
@@ -18,7 +18,7 @@ public class EnrollmentService {
     private final ClassRepo classRepo;
     private final EnrollmentMapper enrollmentMapper;
 
-    public EnrollmentResponse createRegistration(Integer classId) {
+    public EnrollmentResponse createEnrollment(Integer classId) {
         Tutor tutor = tutorService.getThisTutor();
         Class classroom = classRepo.findById(classId)
                 .orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
@@ -30,28 +30,34 @@ public class EnrollmentService {
                 .tutor(tutor)
                 .status(Status.PENDING)
                 .build();
-        return enrollmentMapper.toRegistrationResponse(enrollmentRepo.save(enrollment));
+        return enrollmentMapper.toEnrollmentResponse(enrollmentRepo.save(enrollment));
     }
-
-    //        public Registration updateRegistration(Registration registration) throws RegistrationException {
-//            // Validation (consider security and data integrity)
-//            validateRegistrationUpdate(registration);
-//
-//            Registration existingRegistration = registrationRepository.findById(registration.getId())
-//                    .orElseThrow(() -> new RegistrationException("Registration not found"));
-//
-//            // Update fields (be selective to avoid unintended changes)
-//            existingRegistration.setStatus(registration.getStatus());  // Example update
-//
-//            return registrationRepository.save(existingRegistration);
-//        }
-//
-    public void deleteRegistration(Integer id) {
+    public List<EnrollmentResponse> getEnrollmentsOfClass(Integer classId){
+        Class classroom = classRepo.findById(classId)
+                .orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
+        List<Enrollment> enrollments = enrollmentRepo.findAllByClassroom(classroom);
+        return enrollments.stream()
+                .map(enrollmentMapper::toEnrollmentResponse).toList();
+    }
+    public EnrollmentResponse acceptEnrollment(Integer id) {
         Enrollment enrollment = enrollmentRepo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.REGISTRATION_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.ENROLLMENT_NOT_FOUND));
+        enrollment.setStatus(Status.APPROVED);
+        enrollmentRepo.rejectOtherEnrollments(enrollment.getId(), enrollment.getTutor().getId());
+        return enrollmentMapper.toEnrollmentResponse(enrollmentRepo.save(enrollment));
+    }
+    public List<EnrollmentResponse> getEnrollmentsOfTutor(){
+        Tutor tutor = tutorService.getThisTutor();
+        List<Enrollment> enrollments = enrollmentRepo.findAllByTutor(tutor);
+        return enrollments.stream()
+               .map(enrollmentMapper::toEnrollmentResponse).toList();
+    }
+    public void deleteEnrollment(Integer id) {
+        Enrollment enrollment = enrollmentRepo.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.ENROLLMENT_NOT_FOUND));
         Tutor tutor = tutorService.getThisTutor();
         if (!enrollment.getTutor().equals(tutor)) {
-            throw new AppException(ErrorCode.NOT_YOUR_REGISTRATION);
+            throw new AppException(ErrorCode.NOT_YOUR_ENROLLMENT);
         }
         enrollmentRepo.delete(enrollment);
     }

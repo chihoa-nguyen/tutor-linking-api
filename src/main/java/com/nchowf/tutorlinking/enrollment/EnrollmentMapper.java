@@ -16,5 +16,5 @@ public interface EnrollmentMapper {
         return status != null ? status.value() : null;
     }
     @Mapping(target ="status", source = "status", qualifiedByName = "statusToString")
-    EnrollmentResponse toRegistrationResponse(Enrollment enrollment);
+    EnrollmentResponse toEnrollmentResponse(Enrollment enrollment);
 }
