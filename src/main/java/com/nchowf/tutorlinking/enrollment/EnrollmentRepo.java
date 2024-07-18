@@ -17,7 +17,7 @@ public interface EnrollmentRepo extends JpaRepository<Enrollment, Integer> {
     @Transactional
     @Modifying
     @Query(value = "UPDATE enrollment " +
-            "SET status = 'NO_APPROVED' " +
-            "WHERE class_id = ?1 AND tutor_id NOT IN (?2)", nativeQuery = true)
+                   "SET status = 'NO_APPROVED' " +
+                   "WHERE class_id = ?1 AND tutor_id NOT IN (?2)", nativeQuery = true)
     void rejectOtherEnrollments(Integer classId, Integer tutorAcceptedId);
 }

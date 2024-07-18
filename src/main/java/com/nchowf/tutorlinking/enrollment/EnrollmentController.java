@@ -30,7 +30,7 @@ public class EnrollmentController {
     }
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<EnrollmentResponse> accept(@PathVariable("id") Integer id){
+    public ApiResponse<EnrollmentResponse> accept(@PathVariable(value = "id") Integer id){
         return ApiResponse.<EnrollmentResponse>builder()
                 .message("Duyệt gia sư nhận lớp thành công")
                 .data(enrollmentService.acceptEnrollment(id))
@@ -47,7 +47,7 @@ public class EnrollmentController {
     @PutMapping
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Integer id){
+    public void delete(@PathVariable(value = "id") Integer id){
         enrollmentService.deleteEnrollment(id);
     }
 }

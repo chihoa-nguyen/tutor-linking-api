@@ -20,7 +20,7 @@ public class FilterClassRequest implements Filterable<Class> {
     private static class Filter{
         private Set<Integer> subjectIds;
         private Set<Integer> gradeIds;
-        private Gender  gender;
+        private Gender gender;
         private Set<Position> positions;
         private Set<String> addresses;
     }

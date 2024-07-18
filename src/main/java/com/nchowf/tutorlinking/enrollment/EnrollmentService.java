@@ -2,6 +2,7 @@ package com.nchowf.tutorlinking.enrollment;
 
 import com.nchowf.tutorlinking.classes.Class;
 import com.nchowf.tutorlinking.classes.ClassRepo;
+import com.nchowf.tutorlinking.email.EmailService;
 import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Status;
 import com.nchowf.tutorlinking.exception.AppException;
@@ -13,11 +14,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class EnrollmentService {
-    private final EnrollmentRepo enrollmentRepo;
     private final TutorService tutorService;
+    private final EmailService emailService;
+    private final EnrollmentRepo enrollmentRepo;
     private final ClassRepo classRepo;
     private final EnrollmentMapper enrollmentMapper;
-
     public EnrollmentResponse createEnrollment(Integer classId) {
         Tutor tutor = tutorService.getThisTutor();
         Class classroom = classRepo.findById(classId)
@@ -43,6 +44,7 @@ public class EnrollmentService {
         Enrollment enrollment = enrollmentRepo.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.ENROLLMENT_NOT_FOUND));
         enrollment.setStatus(Status.APPROVED);
+        emailService.sendClassDetailsMail(enrollment, enrollment.getTutor().getEmail());
         enrollmentRepo.rejectOtherEnrollments(enrollment.getId(), enrollment.getTutor().getId());
         return enrollmentMapper.toEnrollmentResponse(enrollmentRepo.save(enrollment));
     }
@@ -62,4 +64,3 @@ public class EnrollmentService {
         enrollmentRepo.delete(enrollment);
     }
 }
-

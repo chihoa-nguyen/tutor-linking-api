@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.email;
 
+import com.nchowf.tutorlinking.enrollment.Enrollment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -20,7 +21,16 @@ public class EmailService {
         message.setSubject("Xác thực email cho tài khoản TutorLinking");
         message.setFrom("tutor.linking@gmail.com");
         message.setTo(to);
-        message.setText(EmailUtils.getEmailMessage(name, userType ,host, token));
+        message.setText(EmailUtils.getVerificationMessage(name, userType ,host, token));
+        emailSender.send(message);
+    }
+    @Async
+    public void sendClassDetailsMail(Enrollment enrollment, String to){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Đăng ký nhận lớp thành công");
+        message.setFrom("tutor.linking@gmail.com");
+        message.setTo(to);
+        message.setText(EmailUtils.getClassDetails(enrollment));
         emailSender.send(message);
     }
 }
