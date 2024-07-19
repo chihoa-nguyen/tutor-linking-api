@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 
 import java.util.LinkedHashSet;
@@ -48,8 +49,9 @@ public class Tutor extends User {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name ="tutor_grade")
     private Set<Grade> grades;
+    @ColumnDefault("0")
+    private float avgRating;
     private String description;
-
     @OneToMany(mappedBy = "tutor")
     private Set<Enrollment> Enrollments = new LinkedHashSet<>();
 

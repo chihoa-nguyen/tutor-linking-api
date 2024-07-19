@@ -23,5 +23,6 @@ public class TutorResponse extends UserResponse {
     private Set<SubjectResponse> subjects;
     private Set<GradeResponse> grades;
     private Set<String> teachingArea;
+    private float avgRating;
     private String description;
 }
