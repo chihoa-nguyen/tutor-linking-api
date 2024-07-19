@@ -10,7 +10,6 @@ import com.nchowf.tutorlinking.review.dto.ReviewRequest;
 import com.nchowf.tutorlinking.review.dto.ReviewResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -34,6 +33,7 @@ public class ReviewService {
         EnrollmentResponse enrollmentResponse = enrollmentService.getEnrollmentResponse(enrollment);
         reviewResponse.setTutor(enrollmentResponse.getTutor());
         reviewResponse.setClassroom(enrollmentResponse.getClassroom());
+        reviewRepo.updateAvgRatingTutor(enrollmentResponse.getTutor().getId());
         return reviewResponse;
     }
     public List<ReviewResponse> getReviewsByTutorId(Integer tutorId) {
