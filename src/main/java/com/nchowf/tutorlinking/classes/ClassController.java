@@ -33,7 +33,7 @@ public class ClassController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
     public ClassResponse getById(@PathVariable("id") Integer id){
-        return classService.getById(id);
+        return classService.getResponseById(classService.getById(id));
     }
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

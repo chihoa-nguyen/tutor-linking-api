@@ -65,7 +65,6 @@ public class ClassService {
     public void deleteClass(Integer id) {
         classRepo.deleteById(id);
     }
-
     public List<ClassResponse> getClasses(FilterClassRequest request) {
         return classRepo.findAll(request.toSpecification())
                 .stream().map(classMapper::toClassResponse).toList();

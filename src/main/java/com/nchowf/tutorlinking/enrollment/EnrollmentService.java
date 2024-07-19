@@ -45,7 +45,7 @@ public class EnrollmentService {
                 .orElseThrow(() -> new AppException(ErrorCode.ENROLLMENT_NOT_FOUND));
         enrollment.setStatus(Status.APPROVED);
         emailService.sendClassDetailsMail(enrollment, enrollment.getTutor().getEmail());
-
+        classService.updateHasTutor(enrollment.getClassroom().getId());
         enrollmentRepo.rejectOtherEnrollments(enrollment.getId(), enrollment.getTutor().getId());
         return enrollmentMapper.toEnrollmentResponse(enrollmentRepo.save(enrollment));
     }

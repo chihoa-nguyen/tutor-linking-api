@@ -30,11 +30,6 @@ public class SubjectController {
     public SubjectResponse getById(@PathVariable("id") Integer id) {
         return subjectService.getById(id);
     }
-//    @GetMapping("/name/{name}")
-//    @ResponseStatus(HttpStatus.FOUND)
-//    public List<Subject> fetchSubjectByName(@PathVariable String name) {
-//        return subjectService.getSubjectsByName(name);
-//    }
     @PutMapping("/{id}")
     public SubjectResponse update(@PathVariable("id") Integer id, @RequestBody @Valid SubjectRequest request){
         return subjectService.updateSubject(id, request);

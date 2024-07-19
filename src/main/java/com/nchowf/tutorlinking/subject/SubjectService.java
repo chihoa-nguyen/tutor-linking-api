@@ -35,10 +35,6 @@ public class SubjectService {
                 .orElseThrow(()-> new AppException(ErrorCode.SUBJECT_NOT_FOUND));
         return subjectMapper.toSubjectResponse(subject);
     }
-
-    public List<Subject> getByName(String name) {
-        return subjectRepo.findSubjectsByNameContains(name);
-    }
     public SubjectResponse updateSubject(Integer id, SubjectRequest request){
         Subject subject = subjectRepo.findById(id)
                .orElseThrow(()-> new AppException(ErrorCode.SUBJECT_NOT_FOUND));
