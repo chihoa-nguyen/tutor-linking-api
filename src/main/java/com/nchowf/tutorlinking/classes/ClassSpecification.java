@@ -19,7 +19,6 @@ public class ClassSpecification {
             return subjectJoin.get("id").in(subjectIds);
         };
     }
-
     public static Specification<Class> hasGradeIds(Collection<Integer> gradeIds) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.and(
                 root.get("grade").isNotNull(),
@@ -35,7 +34,7 @@ public class ClassSpecification {
         };
     }
 
-    //    public static Specification<Class> hasPositions(Collection<Position> positions) {
+//    public static Specification<Class> hasPositions(Collection<Position> positions) {
 //        return (root, query, criteriaBuilder) -> {
 //            Predicate predicate = null;
 //            for (Position position : positions) {
@@ -49,6 +48,7 @@ public class ClassSpecification {
 //            return predicate;
 //        };
 //    }
+
     public static Specification<Class> hasPositions(Collection<Position> positions) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.and(
                 root.get("positionRequired").isNotNull(),

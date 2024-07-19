@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.classes.dto;
 
+import com.nchowf.tutorlinking.parent.dto.ParentResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.util.Set;
 @Builder
 public class ClassResponse {
     private Integer id;
-    private Integer parentId;
+    private ParentResponse parent;
     private Set<String> subjects;
     private Integer numberSession;
     private String time;

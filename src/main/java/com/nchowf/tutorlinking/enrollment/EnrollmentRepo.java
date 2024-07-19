@@ -8,11 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EnrollmentRepo extends JpaRepository<Enrollment, Integer> {
     boolean existsByTutorAndClassroom(Tutor tutor, Class classroom);
+    Optional<Enrollment> findById(Integer id);
     List<Enrollment> findAllByClassroom(Class classroom);
-
     List<Enrollment> findAllByTutor(Tutor tutor);
     @Transactional
     @Modifying

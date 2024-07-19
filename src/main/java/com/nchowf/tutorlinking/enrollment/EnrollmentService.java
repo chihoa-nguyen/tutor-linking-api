@@ -10,7 +10,9 @@ import com.nchowf.tutorlinking.tutor.Tutor;
 import com.nchowf.tutorlinking.tutor.TutorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EnrollmentService {
@@ -62,5 +64,13 @@ public class EnrollmentService {
             throw new AppException(ErrorCode.NOT_YOUR_ENROLLMENT);
         }
         enrollmentRepo.delete(enrollment);
+    }
+
+    public Enrollment findById(Integer enrollmentId) {
+        return enrollmentRepo.findById(enrollmentId)
+                .orElseThrow(()->new AppException(ErrorCode.ENROLLMENT_NOT_FOUND));
+    }
+    public EnrollmentResponse getEnrollmentResponse(Enrollment enrollment){
+        return enrollmentMapper.toEnrollmentResponse(enrollment);
     }
 }

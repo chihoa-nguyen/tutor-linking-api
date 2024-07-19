@@ -23,7 +23,9 @@ public enum ErrorCode {
     NOT_YOUR_CLASS(1025,"Lớp học này không phải của bạn" , HttpStatus.BAD_REQUEST),
     ALREADY_REGISTERED(1026,"Bạn đã đăng ký nhận lớp này" , HttpStatus.BAD_REQUEST),
     ENROLLMENT_NOT_FOUND(1027,"Đăng ký nhận lớp không tồn tại" ,HttpStatus.NOT_FOUND ),
-    NOT_YOUR_ENROLLMENT(1028,"Bạn không thể xóa đăng ký của gia sư khác" , HttpStatus.FORBIDDEN);
+    NOT_YOUR_ENROLLMENT(1028,"Bạn không thể xóa đăng ký của gia sư khác" , HttpStatus.FORBIDDEN),
+    INVALID_ENROLLMENT(1029,"Đăng ký nhận lớp này chưa được giao nên không thể đánh giá gia sư" , HttpStatus.BAD_REQUEST),
+    ALREADY_REVIEWED(1030,"Mỗi lớp chỉ được đánh giá một lần" , HttpStatus.BAD_REQUEST);
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
         this.message = message;
