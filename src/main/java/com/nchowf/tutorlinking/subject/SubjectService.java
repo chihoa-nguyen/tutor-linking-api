@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,9 @@ public class SubjectService {
     public List<SubjectResponse> getALl() {
         return subjectRepo.findAll().stream().map(subjectMapper::toSubjectResponse).toList();
     }
-
+    public List<Subject> getAllById(Set<Integer> subjectIds){
+        return subjectRepo.findAllById(subjectIds);
+    }
     public SubjectResponse getById(Integer id) {
         Subject subject = subjectRepo.findById(id)
                 .orElseThrow(()-> new AppException(ErrorCode.SUBJECT_NOT_FOUND));

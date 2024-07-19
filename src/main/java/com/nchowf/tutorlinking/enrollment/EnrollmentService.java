@@ -1,7 +1,7 @@
 package com.nchowf.tutorlinking.enrollment;
 
 import com.nchowf.tutorlinking.classes.Class;
-import com.nchowf.tutorlinking.classes.ClassRepo;
+import com.nchowf.tutorlinking.classes.ClassService;
 import com.nchowf.tutorlinking.email.EmailService;
 import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Status;
@@ -19,12 +19,11 @@ public class EnrollmentService {
     private final TutorService tutorService;
     private final EmailService emailService;
     private final EnrollmentRepo enrollmentRepo;
-    private final ClassRepo classRepo;
+    private final ClassService classService;
     private final EnrollmentMapper enrollmentMapper;
     public EnrollmentResponse createEnrollment(Integer classId) {
         Tutor tutor = tutorService.getThisTutor();
-        Class classroom = classRepo.findById(classId)
-                .orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
+        Class classroom = classService.getById(classId);
         if (enrollmentRepo.existsByTutorAndClassroom(tutor, classroom)) {
             throw new AppException(ErrorCode.ALREADY_REGISTERED);
         }
@@ -36,8 +35,7 @@ public class EnrollmentService {
         return enrollmentMapper.toEnrollmentResponse(enrollmentRepo.save(enrollment));
     }
     public List<EnrollmentResponse> getEnrollmentsOfClass(Integer classId){
-        Class classroom = classRepo.findById(classId)
-                .orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
+        Class classroom = classService.getById(classId);
         List<Enrollment> enrollments = enrollmentRepo.findAllByClassroom(classroom);
         return enrollments.stream()
                 .map(enrollmentMapper::toEnrollmentResponse).toList();
@@ -47,6 +45,7 @@ public class EnrollmentService {
                 .orElseThrow(() -> new AppException(ErrorCode.ENROLLMENT_NOT_FOUND));
         enrollment.setStatus(Status.APPROVED);
         emailService.sendClassDetailsMail(enrollment, enrollment.getTutor().getEmail());
+
         enrollmentRepo.rejectOtherEnrollments(enrollment.getId(), enrollment.getTutor().getId());
         return enrollmentMapper.toEnrollmentResponse(enrollmentRepo.save(enrollment));
     }

@@ -7,9 +7,9 @@ import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Role;
 import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.grade.Grade;
-import com.nchowf.tutorlinking.grade.GradeRepo;
+import com.nchowf.tutorlinking.grade.GradeService;
 import com.nchowf.tutorlinking.subject.Subject;
-import com.nchowf.tutorlinking.subject.SubjectRepo;
+import com.nchowf.tutorlinking.subject.SubjectService;
 import com.nchowf.tutorlinking.token.JwtService;
 import com.nchowf.tutorlinking.token.VerificationToken;
 import com.nchowf.tutorlinking.token.VerificationTokenRepo;
@@ -37,9 +37,9 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 public class TutorService implements UserService<TutorRequest, TutorUpdateRequest, TutorResponse> {
     private final TutorRepo tutorRepo;
-    private final SubjectRepo subjectRepo;
-    private final GradeRepo gradeRepo;
     private final VerificationTokenRepo tokenRepo;
+    private final SubjectService subjectService;
+    private final GradeService gradeService;
     private final UploadImgService uploadImgService;
     private final EmailService emailService;
     private final TutorMapper tutorMapper;
@@ -55,8 +55,8 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
             throw new AppException(ErrorCode.PHONE_NUMBER_USED);
         if (tutorRepo.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXISTED);
-        List<Subject> subjects = subjectRepo.findAllById(request.getSubjects());
-        List<Grade> grades = gradeRepo.findAllById(request.getGrades());
+        List<Subject> subjects = subjectService.getAllById(request.getSubjects());
+        List<Grade> grades = gradeService.getAllById(request.getGrades());
         File[] files = prepareFileToUpload(request);
         String[] url = uploadFileToDrive(files[0], files[1]);
         Tutor tutor = tutorMapper.toTutor(request);
@@ -134,8 +134,8 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
             throw new AppException(ErrorCode.PHONE_NUMBER_USED);
         Tutor tutor = tutorRepo.findByEmailAndIsEnableTrue(getEmailFromToken())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        List<Subject> subjects = subjectRepo.findAllById(request.getSubjects());
-        List<Grade> grades = gradeRepo.findAllById(request.getGrades());
+        List<Subject> subjects = subjectService.getAllById(request.getSubjects());
+        List<Grade> grades = gradeService.getAllById(request.getGrades());
 //        File[] files = prepareFileToUpload(request);
 //        String[] url = uploadFileToDrive(files[0], files[1]);
         tutorMapper.updateTutor(tutor, request);

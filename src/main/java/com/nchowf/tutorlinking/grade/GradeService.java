@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +26,15 @@ public class GradeService {
         return gradeRepo.findAll().stream()
                 .map(gradeMapper::toGradeResponse).toList();
     }
-    public GradeResponse getById(Integer id){
-        return gradeRepo.findById(id).map(gradeMapper ::toGradeResponse)
+    public List<Grade> getAllById(Set<Integer> gradeIds){
+        return gradeRepo.findAllById(gradeIds);
+    }
+    public Grade getById(Integer id){
+        return gradeRepo.findById(id)
                .orElseThrow(() -> new AppException(ErrorCode.GRADE_NOT_FOUND));
+    }
+    public GradeResponse getResponseById(Grade grade){
+        return gradeMapper.toGradeResponse(grade);
     }
     public GradeResponse updateGrade(Integer id, GradeRequest request){
         Grade grade = gradeRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.GRADE_NOT_FOUND));

@@ -25,10 +25,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ParentService implements UserService<ParentRequest,ParentUpdateRequest,ParentResponse> {
     private final ParentRepo parentRepo;
+    private final VerificationTokenRepo tokenRepo;
     private final ParentMapper parentMapper;
     private final JwtService jwtService;
     private final EmailService emailService;
-    private final VerificationTokenRepo tokenRepo;
     private final PasswordEncoder passwordEncoder;
 
     @Override
