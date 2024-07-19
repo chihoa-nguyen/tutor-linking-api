@@ -37,7 +37,7 @@ public class ClassService {
         return classMapper.toClassResponse(classRepo.save(classroom));
     }
     public List<ClassResponse> getAll(){
-        return classRepo.findAll().stream()
+        return classRepo.findAllByHasTutorFalse().stream()
                .map(classMapper::toClassResponse).toList();
     }
     public ClassResponse getById(Integer id){

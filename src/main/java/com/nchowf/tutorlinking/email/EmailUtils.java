@@ -23,7 +23,7 @@ public class EmailUtils {
         }
         subjects.deleteCharAt(subjects.lastIndexOf(", "));
         return "Kính gửi gia sư " + enrollment.getTutor().getName() + ","
-                + "\nPhụ huynh đã chấp nhận đăng ký nhận lớp " + enrollment.getClassroom().getId() + " của bạn."
+                + "\nPhụ huynh đã chấp nhận đăng ký nhận lớp của bạn."
                 + "\n\nThông tin chi tiết lớp dạy:"
                 + "\n- Mã lớp: " + enrollment.getClassroom().getId()
                 + "\n- Môn học: " + subjects

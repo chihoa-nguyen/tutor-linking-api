@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.Set;
 
@@ -55,4 +56,6 @@ public class Class extends BaseEntity {
     private Gender genderRequired;
     @Lob()
     private String note;
+    @ColumnDefault("false")
+    private boolean hasTutor;
 }
