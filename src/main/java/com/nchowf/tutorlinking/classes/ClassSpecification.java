@@ -19,6 +19,7 @@ public class ClassSpecification {
             return subjectJoin.get("id").in(subjectIds);
         };
     }
+
     public static Specification<Class> hasGradeIds(Collection<Integer> gradeIds) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.and(
                 root.get("grade").isNotNull(),
@@ -56,18 +57,25 @@ public class ClassSpecification {
         );
     }
 
-    public static Specification<Class> hasAddresses(Set<String> addresses) {
+    public static Specification<Class> hasDistricts(Collection<String> districts) {
         return (root, query, criteriaBuilder) -> {
-            Predicate predicate = null;
-            for (String address : addresses) {
-                Predicate currentPredicate = criteriaBuilder.like(root.get("address"), "%" + address + "%");
-                if (predicate == null) {
-                    predicate = currentPredicate;
-                } else {
-                    predicate = criteriaBuilder.or(predicate, currentPredicate);
-                }
-            }
-            return predicate;
+            Predicate districtPredicate =
+                    criteriaBuilder.function("JSON_VALUE", String.class,
+                            root.get("address"),
+                            criteriaBuilder.literal("$.district")).in(districts);
+            return districtPredicate;
         };
+    }
+    public static Specification<Class> hasCity(String city) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate cityPredicate = criteriaBuilder.equal(
+                    criteriaBuilder.function("JSON_VALUE", String.class, root.get("address"), criteriaBuilder.literal("$.city")),
+                    criteriaBuilder.literal(city)
+            );
+            return cityPredicate;
+        };
+    }
+    public static Specification<Class> hasTutorFalse() {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("hasTutor"),Boolean.FALSE);
     }
 }

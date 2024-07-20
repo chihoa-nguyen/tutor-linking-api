@@ -22,7 +22,8 @@ public class FilterClassRequest implements Filterable<Class> {
         private Set<Integer> gradeIds;
         private Gender gender;
         private Set<Position> positions;
-        private Set<String> addresses;
+        private String city;
+        private Set<String> districts;
     }
     @Override
     public Specification<Class> toSpecification(){
@@ -39,9 +40,13 @@ public class FilterClassRequest implements Filterable<Class> {
         if(!CollectionUtils.isEmpty(filter.positions)){
             specification = specification.and(ClassSpecification.hasPositions(filter.positions.stream().toList()));
         }
-        if(!CollectionUtils.isEmpty(filter.addresses)){
-            specification = specification.and(ClassSpecification.hasAddresses(filter.addresses));
+        if(filter.city != null){
+            specification = specification.and(ClassSpecification.hasCity(filter.city));
         }
+        if(!CollectionUtils.isEmpty(filter.districts)){
+            specification = specification.and(ClassSpecification.hasDistricts(filter.districts));
+        }
+        specification = specification.and(ClassSpecification.hasTutorFalse());
         return specification;
     }
 }
