@@ -49,6 +49,14 @@ public class TutorController{
                 .data(tutorService.getAll())
                 .build();
     }
+    @GetMapping("/class/{classId}")
+    @ResponseStatus(value = HttpStatus.FOUND)
+    public ApiResponse<List<TutorResponse>> getSuitableClass(@PathVariable Integer classId) {
+        return ApiResponse.<List<TutorResponse>>builder()
+                .message("Lấy danh sách gia sư phù hợp với lớp thành công")
+                .data(tutorService.getTutorsSuitableForClass(classId))
+                .build();
+    }
 
     @GetMapping("/{id}")
     @ResponseStatus(value = HttpStatus.FOUND)

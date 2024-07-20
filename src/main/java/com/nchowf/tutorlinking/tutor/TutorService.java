@@ -175,7 +175,10 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         return tutorRepo.findAll().stream()
                 .map(tutorMapper::tuTutorResponse).toList();
     }
-
+    public List<TutorResponse> getTutorsSuitableForClass(Integer classId) {
+        return tutorRepo.findTutorsSuitable(classId)
+                .stream().map(tutorMapper::tuTutorResponse).toList();
+    }
     @Override
     public void delete(Integer id) {
         Tutor tutor = tutorRepo.findById(id)
