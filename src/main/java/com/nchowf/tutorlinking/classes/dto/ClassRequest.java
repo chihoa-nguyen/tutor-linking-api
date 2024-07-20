@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.classes.dto;
 
+import com.nchowf.tutorlinking.utils.Address;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,7 +26,8 @@ public class ClassRequest {
     private Integer gradeId;
     @Min(value = 1, message ="Học phí phải là số dương")
     private int fee;
-    private String address;
+    @NotNull(message = "Địa chỉ lớp không được thiếu")
+    private Address address;
     @NotNull(message = "Yêu cầu về chức vụ của gia sư không được thiếu")
     private int positionRequired;
     @NotNull(message = "Yêu cầu về giới của gia sư không được thiếu")

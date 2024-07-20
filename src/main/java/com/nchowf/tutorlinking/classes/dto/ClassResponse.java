@@ -1,6 +1,7 @@
 package com.nchowf.tutorlinking.classes.dto;
 
 import com.nchowf.tutorlinking.parent.dto.ParentResponse;
+import com.nchowf.tutorlinking.utils.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class ClassResponse {
     private String time;
     private String grade;
     private int fee;
-    private String address;
+    private Address address;
     private String positionRequired;
     private String genderRequired;
     private String note;

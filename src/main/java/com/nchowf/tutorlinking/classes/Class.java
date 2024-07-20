@@ -3,15 +3,18 @@ package com.nchowf.tutorlinking.classes;
 import com.nchowf.tutorlinking.grade.Grade;
 import com.nchowf.tutorlinking.parent.Parent;
 import com.nchowf.tutorlinking.subject.Subject;
+import com.nchowf.tutorlinking.utils.Address;
 import com.nchowf.tutorlinking.utils.BaseEntity;
 import com.nchowf.tutorlinking.enums.Gender;
 import com.nchowf.tutorlinking.enums.Position;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Type;
 
 import java.util.Set;
 
@@ -21,10 +24,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Class extends BaseEntity {
-    @Column(
-            nullable = false
-    )
-    private String address;
+    @Type(JsonType.class)
+    @Column(columnDefinition = "json", nullable = false)
+    private Address address;
     @Column(nullable = false)
     private int numberSession;
     @Column(nullable = false)

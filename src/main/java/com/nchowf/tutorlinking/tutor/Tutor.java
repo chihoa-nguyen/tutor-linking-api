@@ -1,6 +1,5 @@
 package com.nchowf.tutorlinking.tutor;
 
-import com.nchowf.tutorlinking.enrollment.Enrollment;
 import com.nchowf.tutorlinking.enums.Gender;
 import com.nchowf.tutorlinking.enums.Position;
 import com.nchowf.tutorlinking.grade.Grade;
@@ -14,7 +13,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
@@ -52,7 +50,4 @@ public class Tutor extends User {
     @ColumnDefault("0")
     private float avgRating;
     private String description;
-    @OneToMany(mappedBy = "tutor")
-    private Set<Enrollment> Enrollments = new LinkedHashSet<>();
-
 }

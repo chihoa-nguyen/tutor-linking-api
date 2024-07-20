@@ -53,7 +53,6 @@ public interface ClassMapper {
     @Mapping(target = "genderRequired", source = "genderRequired", qualifiedByName = "genderToString")
     @Mapping(target = "positionRequired", source = "positionRequired", qualifiedByName = "positionToString")
     @Mapping(target = "subjects", source = "subjects", qualifiedByName = "subjectsToString")
-//    @Mapping(target = "parent", source = "parent")
     @Mapping(target = "grade", source = "grade.name")
     ClassResponse toClassResponse(Class classroom);
     @Mapping(target = "id", ignore = true)
