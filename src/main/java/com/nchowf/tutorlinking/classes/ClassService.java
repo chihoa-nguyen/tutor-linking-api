@@ -11,6 +11,8 @@ import com.nchowf.tutorlinking.parent.Parent;
 import com.nchowf.tutorlinking.parent.ParentService;
 import com.nchowf.tutorlinking.subject.Subject;
 import com.nchowf.tutorlinking.subject.SubjectService;
+import com.nchowf.tutorlinking.tutor.Tutor;
+import com.nchowf.tutorlinking.tutor.TutorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +26,8 @@ public class ClassService {
     private final GradeService gradeService;
     private final SubjectService subjectService;
     private final ParentService parentService;
+    private final TutorService tutorService;
     private final ClassMapper classMapper;
-
     public ClassResponse createClass(ClassRequest request) {
         Parent parent = parentService.getThisParent();
         List<Subject> subjects = subjectService.getAllById(request.getSubjects());
@@ -35,11 +37,6 @@ public class ClassService {
         classroom.setSubjects(new HashSet<>(subjects));
         classroom.setGrade(grade);
         return classMapper.toClassResponse(classRepo.save(classroom));
-    }
-
-    public List<ClassResponse> getAll() {
-        return classRepo.findAllByHasTutorFalse().stream()
-                .map(classMapper::toClassResponse).toList();
     }
     public Class getById(Integer id) {
         return classRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
@@ -73,5 +70,15 @@ public class ClassService {
         Class classroom = classRepo.findById(classId).orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
         classroom.setHasTutor(!classroom.isHasTutor());
         classRepo.save(classroom);
+    }
+    public List<ClassResponse> getClassesOfThisParent() {
+        Parent parent = parentService.getThisParent();
+        return classRepo.findAllByParent(parent).stream()
+               .map(classMapper::toClassResponse).toList();
+    }
+    public List<ClassResponse> getClassesSuitableForTutor(){
+        Tutor tutor = tutorService.getThisTutor();
+        return classRepo.getClassesSuitableForTutor(tutor.getId())
+                .stream().map(classMapper::toClassResponse).toList();
     }
 }

@@ -9,7 +9,6 @@ import lombok.experimental.UtilityClass;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Collection;
-import java.util.Set;
 
 @UtilityClass
 public class ClassSpecification {
@@ -35,21 +34,6 @@ public class ClassSpecification {
         };
     }
 
-//    public static Specification<Class> hasPositions(Collection<Position> positions) {
-//        return (root, query, criteriaBuilder) -> {
-//            Predicate predicate = null;
-//            for (Position position : positions) {
-//                Predicate currentPredicate = criteriaBuilder.equal(root.get("positionRequired"), position);
-//                if (predicate == null) {
-//                    predicate = currentPredicate;
-//                } else {
-//                    predicate = criteriaBuilder.or(predicate, currentPredicate);
-//                }
-//            }
-//            return predicate;
-//        };
-//    }
-
     public static Specification<Class> hasPositions(Collection<Position> positions) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.and(
                 root.get("positionRequired").isNotNull(),
@@ -66,6 +50,7 @@ public class ClassSpecification {
             return districtPredicate;
         };
     }
+
     public static Specification<Class> hasCity(String city) {
         return (root, query, criteriaBuilder) -> {
             Predicate cityPredicate = criteriaBuilder.equal(
@@ -75,7 +60,8 @@ public class ClassSpecification {
             return cityPredicate;
         };
     }
+
     public static Specification<Class> hasTutorFalse() {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("hasTutor"),Boolean.FALSE);
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("hasTutor"), Boolean.FALSE);
     }
 }

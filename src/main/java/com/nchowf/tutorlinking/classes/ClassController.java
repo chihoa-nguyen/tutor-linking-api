@@ -22,18 +22,24 @@ public class ClassController {
     }
     @GetMapping("")
     @ResponseStatus(HttpStatus.FOUND)
-    public List<ClassResponse> getAll(){
-        return classService.getAll();
-    }
-    @GetMapping("/filter")
-    @ResponseStatus(HttpStatus.FOUND)
     public List<ClassResponse> getClasses(@RequestBody FilterClassRequest request){
         return classService.getClasses(request);
     }
+    @GetMapping("/parent")
+    @ResponseStatus(HttpStatus.FOUND)
+    public List<ClassResponse> getClassesOfThisParent(){
+        return classService.getClassesOfThisParent();
+    }
+
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
     public ClassResponse getById(@PathVariable("id") Integer id){
         return classService.getResponseById(classService.getById(id));
+    }
+    @GetMapping("/tutor")
+    @ResponseStatus(HttpStatus.FOUND)
+    public List<ClassResponse> getClassesSuitableForTutor(){
+        return classService.getClassesSuitableForTutor();
     }
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

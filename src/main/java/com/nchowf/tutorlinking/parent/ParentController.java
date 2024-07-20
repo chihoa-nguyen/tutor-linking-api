@@ -75,7 +75,6 @@ public class ParentController {
                 .data(parentService.update(parentRequest))
                 .build();
     }
-
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Integer id) {
