@@ -29,15 +29,6 @@ public class ParentController {
     public String verify(@RequestParam String token){
         return parentService.verifyEmail(token);
     }
-//    @PostMapping("/login")
-//    @ResponseStatus(HttpStatus.OK)
-//    public ApiResponse<AuthResponse> login(@RequestBody @Valid AuthRequest request) throws JOSEException {
-//        return ApiResponse.<AuthResponse>builder()
-//                .message("Đăng nhập thành công")
-//                .data(parentService.authenticate(request))
-//                .build();
-//    }
-
     @GetMapping("")
     @ResponseStatus(value = HttpStatus.FOUND)
     public ApiResponse<List<ParentResponse>> getAll() {

@@ -30,14 +30,6 @@ public class TutorController{
     public String verify(@RequestParam String token){
         return tutorService.verifyEmail(token);
     }
-//    @PostMapping("/login")
-//    @ResponseStatus(HttpStatus.OK)
-//    public ApiResponse<AuthResponse> login(@RequestBody @Valid AuthRequest request) throws JOSEException {
-//        return ApiResponse.<AuthResponse>builder()
-//                .message("Đăng nhập thành công")
-//                .data(tutorService.authenticate(request))
-//                .build();
-//    }
     @GetMapping("")
     @ResponseStatus(value = HttpStatus.FOUND)
     public ApiResponse<List<TutorResponse>> getAll() {
