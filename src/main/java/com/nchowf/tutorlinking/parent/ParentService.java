@@ -1,19 +1,17 @@
 package com.nchowf.tutorlinking.parent;
 
-import com.nchowf.tutorlinking.auth.AuthRequest;
-import com.nchowf.tutorlinking.auth.AuthResponse;
 import com.nchowf.tutorlinking.email.EmailService;
 import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Role;
+import com.nchowf.tutorlinking.enums.TokenType;
 import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.parent.dto.ParentRequest;
 import com.nchowf.tutorlinking.parent.dto.ParentResponse;
 import com.nchowf.tutorlinking.parent.dto.ParentUpdateRequest;
 import com.nchowf.tutorlinking.token.JwtService;
-import com.nchowf.tutorlinking.token.VerificationToken;
-import com.nchowf.tutorlinking.token.VerificationTokenRepo;
+import com.nchowf.tutorlinking.token.Token;
+import com.nchowf.tutorlinking.token.TokenRepo;
 import com.nchowf.tutorlinking.user.UserService;
-import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,9 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ParentService implements UserService<ParentRequest,ParentUpdateRequest,ParentResponse> {
     private final ParentRepo parentRepo;
-    private final VerificationTokenRepo tokenRepo;
+    private final TokenRepo tokenRepo;
     private final ParentMapper parentMapper;
-    private final JwtService jwtService;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
@@ -41,7 +38,7 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
         parent.setRole(Role.PARENT);
         parent.setPassword(passwordEncoder.encode(request.getPassword()));
         parentRepo.save(parent);
-        VerificationToken token = new VerificationToken(parent.getId(), Role.PARENT);
+        Token token = new Token(parent.getId(), Role.PARENT);
         tokenRepo.save(token);
         emailService.sendVerificationMail(parent.getName(),
                 parent.getEmail(), token.getToken(),"parent");
@@ -50,22 +47,8 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
     }
 
     @Override
-    public AuthResponse authenticate(AuthRequest request) throws JOSEException {
-        Parent parent = parentRepo.findByEmailAndIsEnableTrue(request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
-        if (!passwordEncoder.matches(request.getPassword(), parent.getPassword())) {
-            throw new AppException(ErrorCode.PASSWORD_WRONG);
-        }
-        String token = jwtService.generateToken(parent);
-        return AuthResponse.builder()
-                .token(token)
-                .isAuthenticated(true)
-                .build();
-    }
-
-    @Override
     public String verifyEmail(String token) {
-        VerificationToken verificationToken = tokenRepo.findByTokenAndRole(token, Role.PARENT);
+        Token verificationToken = tokenRepo.findByTokenAndRoleAndAndType(token, Role.PARENT, TokenType.VERIFICATION);
         Parent parent = parentRepo.findById(verificationToken.getUserId())
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
         parent.setEnable(true);
@@ -111,5 +94,10 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
     public void delete(Integer id) {
         Parent parent = parentRepo.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
         parentRepo.delete(parent);
+    }
+
+    public Parent getParentByEmail(String email) {
+        return parentRepo.findByEmailAndIsEnableTrue(email)
+               .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
 }

@@ -1,24 +1,22 @@
 package com.nchowf.tutorlinking.tutor;
 
-import com.nchowf.tutorlinking.auth.AuthRequest;
-import com.nchowf.tutorlinking.auth.AuthResponse;
 import com.nchowf.tutorlinking.email.EmailService;
 import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Role;
+import com.nchowf.tutorlinking.enums.TokenType;
 import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.grade.Grade;
 import com.nchowf.tutorlinking.grade.GradeService;
 import com.nchowf.tutorlinking.subject.Subject;
 import com.nchowf.tutorlinking.subject.SubjectService;
 import com.nchowf.tutorlinking.token.JwtService;
-import com.nchowf.tutorlinking.token.VerificationToken;
-import com.nchowf.tutorlinking.token.VerificationTokenRepo;
+import com.nchowf.tutorlinking.token.Token;
+import com.nchowf.tutorlinking.token.TokenRepo;
 import com.nchowf.tutorlinking.tutor.dto.TutorRequest;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorUpdateRequest;
 import com.nchowf.tutorlinking.user.UserService;
 import com.nchowf.tutorlinking.utils.UploadImgService;
-import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,7 +35,7 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 public class TutorService implements UserService<TutorRequest, TutorUpdateRequest, TutorResponse> {
     private final TutorRepo tutorRepo;
-    private final VerificationTokenRepo tokenRepo;
+    private final TokenRepo tokenRepo;
     private final SubjectService subjectService;
     private final GradeService gradeService;
     private final UploadImgService uploadImgService;
@@ -67,36 +65,21 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         tutor.setAvt(url[0]);
         tutor.setDegree(url[1]);
         tutorRepo.save(tutor);
-        VerificationToken token = new VerificationToken(tutor.getId(), Role.TUTOR);
+        Token token = new Token(tutor.getId(), Role.TUTOR);
         tokenRepo.save(token);
         emailService.sendVerificationMail(tutor.getName(), tutor.getEmail(),
                 token.getToken(), "tutor");
         return tutorMapper.tuTutorResponse(tutorRepo
                 .save(tutor));
     }
-
     @Override
     public String verifyEmail(String token) {
-        VerificationToken verificationToken = tokenRepo.findByTokenAndRole(token, Role.TUTOR);
+        Token verificationToken = tokenRepo.findByTokenAndRoleAndAndType(token, Role.TUTOR, TokenType.VERIFICATION);
         Tutor tutor = tutorRepo.findById(verificationToken.getUserId())
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
         tutor.setEnable(true);
         tutorRepo.save(tutor);
         return "<p>Địa chỉ email " + tutor.getEmail()+" đã được xác minh</p>";
-    }
-    @Override
-    public AuthResponse authenticate(AuthRequest request) throws JOSEException {
-        Tutor tutor = tutorRepo.findByEmailAndIsEnableTrue(request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
-
-        if (!passwordEncoder.matches(request.getPassword(), tutor.getPassword())) {
-            throw new AppException(ErrorCode.PASSWORD_WRONG);
-        }
-        String token = jwtService.generateToken(tutor);
-        return AuthResponse.builder()
-                .token(token)
-                .isAuthenticated(true)
-                .build();
     }
     private File[] prepareFileToUpload(TutorRequest request) throws IOException {
         File tempAvtFile = File.createTempFile("avt_", null);
@@ -184,5 +167,10 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         Tutor tutor = tutorRepo.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         tutorRepo.delete(tutor);
+    }
+
+    public Tutor getTutorByEmail(String email) {
+        return tutorRepo.findByEmailAndIsEnableTrue(email)
+               .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
 }

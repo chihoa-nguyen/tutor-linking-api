@@ -32,8 +32,8 @@ spring:
       host: "http://localhost:8080/api/v1/"
 jwt:
   secret-key: "8d9d5e010c2cb62a01135d1f9cac76748d604b902d57c2e98665253df1809ad8"
-  expiration-time: 86400 # in seconds
-  refreshable-time: 259200 # in seconds
+  expiration-time: 86400000 # a day
+  refreshable-time: 604800000 # 7 days
 gg-driver:
   root-url: "https://drive.google.com/uc?export=view&id="
   avt-folder-id: "1mymQUalzbrRICbe1-PNEJeUu75xsE9uV"

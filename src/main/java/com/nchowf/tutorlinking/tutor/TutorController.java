@@ -1,12 +1,9 @@
 package com.nchowf.tutorlinking.tutor;
 
-import com.nchowf.tutorlinking.auth.AuthRequest;
-import com.nchowf.tutorlinking.auth.AuthResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorRequest;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorUpdateRequest;
 import com.nchowf.tutorlinking.utils.ApiResponse;
-import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,14 +30,14 @@ public class TutorController{
     public String verify(@RequestParam String token){
         return tutorService.verifyEmail(token);
     }
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<AuthResponse> login(@RequestBody @Valid AuthRequest request) throws JOSEException {
-        return ApiResponse.<AuthResponse>builder()
-                .message("Đăng nhập thành công")
-                .data(tutorService.authenticate(request))
-                .build();
-    }
+//    @PostMapping("/login")
+//    @ResponseStatus(HttpStatus.OK)
+//    public ApiResponse<AuthResponse> login(@RequestBody @Valid AuthRequest request) throws JOSEException {
+//        return ApiResponse.<AuthResponse>builder()
+//                .message("Đăng nhập thành công")
+//                .data(tutorService.authenticate(request))
+//                .build();
+//    }
     @GetMapping("")
     @ResponseStatus(value = HttpStatus.FOUND)
     public ApiResponse<List<TutorResponse>> getAll() {

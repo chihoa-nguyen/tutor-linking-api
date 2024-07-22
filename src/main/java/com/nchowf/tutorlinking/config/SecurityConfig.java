@@ -20,7 +20,7 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private static final String[] PUBLIC_ENDPOINTS = {"/parent/login", "/tutor/login", "/parent/register", "/tutor/register","/tutor/verify","/parent/verify"};
+    private static final String[] PUBLIC_ENDPOINTS = {"/auth/**","/parent/login", "/tutor/login", "/parent/register", "/tutor/register","/tutor/verify","/parent/verify"};
     @Value("${jwt.secret-key}")
     private String secretKey;
     @Bean

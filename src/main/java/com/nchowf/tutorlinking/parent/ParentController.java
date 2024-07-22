@@ -1,12 +1,9 @@
 package com.nchowf.tutorlinking.parent;
 
-import com.nchowf.tutorlinking.auth.AuthRequest;
-import com.nchowf.tutorlinking.auth.AuthResponse;
 import com.nchowf.tutorlinking.parent.dto.ParentRequest;
 import com.nchowf.tutorlinking.parent.dto.ParentResponse;
 import com.nchowf.tutorlinking.parent.dto.ParentUpdateRequest;
 import com.nchowf.tutorlinking.utils.ApiResponse;
-import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,14 +29,14 @@ public class ParentController {
     public String verify(@RequestParam String token){
         return parentService.verifyEmail(token);
     }
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<AuthResponse> login(@RequestBody @Valid AuthRequest request) throws JOSEException {
-        return ApiResponse.<AuthResponse>builder()
-                .message("Đăng nhập thành công")
-                .data(parentService.authenticate(request))
-                .build();
-    }
+//    @PostMapping("/login")
+//    @ResponseStatus(HttpStatus.OK)
+//    public ApiResponse<AuthResponse> login(@RequestBody @Valid AuthRequest request) throws JOSEException {
+//        return ApiResponse.<AuthResponse>builder()
+//                .message("Đăng nhập thành công")
+//                .data(parentService.authenticate(request))
+//                .build();
+//    }
 
     @GetMapping("")
     @ResponseStatus(value = HttpStatus.FOUND)
