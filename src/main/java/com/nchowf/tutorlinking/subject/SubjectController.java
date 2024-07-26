@@ -20,7 +20,7 @@ public class SubjectController {
     }
 
     @GetMapping("")
-    @ResponseStatus(HttpStatus.FOUND)
+    //@ResponseStatus(HttpStatus.FOUND)
     public List<SubjectResponse> getSubjects() {
         return subjectService.getALl();
     }

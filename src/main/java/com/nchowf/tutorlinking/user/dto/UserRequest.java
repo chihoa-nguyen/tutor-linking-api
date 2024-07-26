@@ -1,6 +1,5 @@
 package com.nchowf.tutorlinking.user.dto;
 
-import com.nchowf.tutorlinking.enums.Role;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
