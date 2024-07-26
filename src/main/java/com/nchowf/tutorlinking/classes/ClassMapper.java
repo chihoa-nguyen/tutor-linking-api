@@ -5,11 +5,14 @@ import com.nchowf.tutorlinking.classes.dto.ClassRequest;
 import com.nchowf.tutorlinking.classes.dto.ClassResponse;
 import com.nchowf.tutorlinking.enums.Gender;
 import com.nchowf.tutorlinking.enums.Position;
+import com.nchowf.tutorlinking.subject.Subject;
 import com.nchowf.tutorlinking.utils.Address;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ClassMapper {
@@ -37,11 +40,11 @@ public interface ClassMapper {
     static String positionToString(Position position) {
         return position != null ? position.value() : null;
     }
-//    @Named("subjectsToString")
-//    static Set<String> subjectsToString(Set<Subject> subjects){
-//        return subjects.stream().map(Subject::getName)
-//                .collect(Collectors.toSet());
-//    }
+    @Named("subjectsToString")
+    static Set<String> subjectsToString(Set<Subject> subjects){
+        return subjects.stream().map(Subject::getName)
+                .collect(Collectors.toSet());
+    }
     @Named("addressToString")
     static String addressToString(Address address){
         String fullAddress = String.format("%s, %s, %s, %s", address.getStreetNumber(), address.getWard(), address.getWard(), address.getCity());
@@ -61,6 +64,8 @@ public interface ClassMapper {
     @Mapping(target = "genderRequired", source = "genderRequired", qualifiedByName = "genderToString")
     @Mapping(target = "positionRequired", source = "positionRequired", qualifiedByName = "positionToString")
     @Mapping(target = "address", source = "address", qualifiedByName = "addressToString")
+    @Mapping(target = "subjects", source = "subjects", qualifiedByName = "subjectsToString")
+    @Mapping(target = "grade", source = "grade.name")
     ClassResponse toClassResponse(Class classroom);
     @Mapping(target = "genderRequired", source = "genderRequired", qualifiedByName = "genderToString")
     @Mapping(target = "positionRequired", source = "positionRequired", qualifiedByName = "positionToString")

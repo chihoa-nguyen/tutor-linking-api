@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.tutor;
 
+import com.nchowf.tutorlinking.tutor.dto.TutorDetailResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorRequest;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorUpdateRequest;
@@ -20,8 +21,8 @@ public class TutorController{
     private final TutorService tutorService;
     @PostMapping("/register")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public ApiResponse<TutorResponse> add(@ModelAttribute @Valid TutorRequest request) throws IOException, ExecutionException, InterruptedException {
-        return ApiResponse.<TutorResponse>builder()
+    public ApiResponse<TutorDetailResponse> add(@ModelAttribute @Valid TutorRequest request) throws IOException, ExecutionException, InterruptedException {
+        return ApiResponse.<TutorDetailResponse>builder()
                 .message("Tạo mới gia sư thành công")
                 .data(tutorService.register(request))
                 .build();
@@ -57,8 +58,8 @@ public class TutorController{
     }
     @GetMapping("/infor")
     @ResponseStatus(value = HttpStatus.FOUND)
-    public ApiResponse<TutorResponse> getInfor() {
-        return ApiResponse.<TutorResponse>builder()
+    public ApiResponse<TutorDetailResponse> getInfor() {
+        return ApiResponse.<TutorDetailResponse>builder()
                 .message("Lấy thông tin gia sư thành công")
                 .data(tutorService.getInforByToken())
                 .build();
@@ -66,8 +67,8 @@ public class TutorController{
 
     @PutMapping("")
     @ResponseStatus(value = HttpStatus.OK)
-    public ApiResponse<TutorResponse> update(@RequestBody @Valid TutorUpdateRequest request) {
-        return ApiResponse.<TutorResponse>builder()
+    public ApiResponse<TutorDetailResponse> update(@RequestBody @Valid TutorUpdateRequest request) {
+        return ApiResponse.<TutorDetailResponse>builder()
                 .message("Cập nhật thông tin thành công")
                 .data(tutorService.update(request))
                 .build();

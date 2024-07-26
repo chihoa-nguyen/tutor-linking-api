@@ -1,28 +1,26 @@
 package com.nchowf.tutorlinking.tutor.dto;
 
-import com.nchowf.tutorlinking.grade.dto.GradeResponse;
-import com.nchowf.tutorlinking.subject.dto.SubjectResponse;
-import com.nchowf.tutorlinking.user.dto.UserResponse;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
-
-@EqualsAndHashCode(callSuper = true)
 @Data
-@SuperBuilder
-public class TutorResponse extends UserResponse {
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class TutorResponse {
+    private Integer id;
+    private String name;
     private String birthday;
     private String gender;
     private String avt;
-    private String degree;
+    private String position;
     private String universityName;
     private String major;
-    private String position;
-    private Set<SubjectResponse> subjects;
-    private Set<GradeResponse> grades;
+    private Set<String> subjects;
+    private Set<String> grades;
     private Set<String> teachingArea;
-    private float avgRating;
     private String description;
 }

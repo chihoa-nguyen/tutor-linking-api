@@ -11,7 +11,6 @@ public class UserResponse {
     private Integer id;
     private String email;
     private String name;
-    private String role;
     private String phoneNumber;
     private String address;
     private Date createdAt;

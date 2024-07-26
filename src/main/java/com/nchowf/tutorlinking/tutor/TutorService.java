@@ -12,6 +12,7 @@ import com.nchowf.tutorlinking.subject.SubjectService;
 import com.nchowf.tutorlinking.token.JwtService;
 import com.nchowf.tutorlinking.token.Token;
 import com.nchowf.tutorlinking.token.TokenRepo;
+import com.nchowf.tutorlinking.tutor.dto.TutorDetailResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorRequest;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorUpdateRequest;
@@ -33,7 +34,7 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
-public class TutorService implements UserService<TutorRequest, TutorUpdateRequest, TutorResponse> {
+public class TutorService implements UserService<TutorRequest, TutorUpdateRequest, TutorDetailResponse> {
     private final TutorRepo tutorRepo;
     private final TokenRepo tokenRepo;
     private final SubjectService subjectService;
@@ -48,7 +49,7 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     private String DEGREE_FOLDER_ID;
     private final JwtService jwtService;
     @Override
-    public TutorResponse register(TutorRequest request) throws IOException, ExecutionException, InterruptedException {
+    public TutorDetailResponse register(TutorRequest request) throws IOException, ExecutionException, InterruptedException {
         if (tutorRepo.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_NUMBER_USED);
         if (tutorRepo.existsByEmail(request.getEmail()))
@@ -69,7 +70,7 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         tokenRepo.save(token);
         emailService.sendVerificationMail(tutor.getName(), tutor.getEmail(),
                 token.getToken(), "tutor");
-        return tutorMapper.tuTutorResponse(tutorRepo
+        return tutorMapper.tuTutorDetailResponse(tutorRepo
                 .save(tutor));
     }
     @Override
@@ -112,7 +113,7 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     }
 
     @Override
-    public TutorResponse update(TutorUpdateRequest request) {
+    public TutorDetailResponse update(TutorUpdateRequest request) {
         if (tutorRepo.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_NUMBER_USED);
         Tutor tutor = tutorRepo.findByEmailAndIsEnableTrue(getEmailFromToken())
@@ -126,11 +127,11 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         tutor.setGrades(new HashSet<>(grades));
 //        tutor.setAvt(url[0]);
 //        tutor.setDegree(url[1]);
-        return tutorMapper.tuTutorResponse(tutorRepo.save(tutor));
+        return tutorMapper.tuTutorDetailResponse(tutorRepo.save(tutor));
     }
 
-    @Override
-    public TutorResponse getById(Integer id) {
+
+    public TutorResponse getById(Integer id){
         Tutor tutor = tutorRepo.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         return tutorMapper.tuTutorResponse(tutor);
@@ -142,10 +143,10 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
     @Override
-    public TutorResponse getInforByToken() {
+    public TutorDetailResponse getInforByToken() {
         String email = getEmailFromToken();
         Tutor tutor = tutorRepo.findByEmailAndIsEnableTrue(email).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
-        return tutorMapper.tuTutorResponse(tutor);
+        return tutorMapper.tuTutorDetailResponse(tutor);
     }
 
     @Override
@@ -153,7 +154,6 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
-    @Override
     public List<TutorResponse> getAll() {
         return tutorRepo.findAll().stream()
                 .map(tutorMapper::tuTutorResponse).toList();

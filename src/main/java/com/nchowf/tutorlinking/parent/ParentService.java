@@ -8,7 +8,6 @@ import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.parent.dto.ParentRequest;
 import com.nchowf.tutorlinking.parent.dto.ParentResponse;
 import com.nchowf.tutorlinking.parent.dto.ParentUpdateRequest;
-import com.nchowf.tutorlinking.token.JwtService;
 import com.nchowf.tutorlinking.token.Token;
 import com.nchowf.tutorlinking.token.TokenRepo;
 import com.nchowf.tutorlinking.user.UserService;
@@ -56,7 +55,7 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
         return "<p>Địa chỉ email " + parent.getEmail() + " đã được xác minh !</p>";
     }
 
-    @Override
+
     public ParentResponse getById(Integer id) {
         Parent parent = parentRepo.findById(id)
                 .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXISTED)));
@@ -77,7 +76,7 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
-    @Override
+
     public List<ParentResponse> getAll() {
         return parentRepo.findAllByIsEnableTrue().stream()
                 .map(parentMapper::toParentResponse).toList();
