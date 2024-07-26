@@ -1,6 +1,6 @@
 package com.nchowf.tutorlinking.enrollment;
 
-import com.nchowf.tutorlinking.classes.dto.ClassResponse;
+import com.nchowf.tutorlinking.classes.dto.ClassDetailResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import java.util.Date;
 @Builder
 public class EnrollmentResponse {
     private Integer id;
-    private ClassResponse classroom;
+    private ClassDetailResponse classroom;
     private TutorResponse tutor;
     private String status;
     private Date createdAt;

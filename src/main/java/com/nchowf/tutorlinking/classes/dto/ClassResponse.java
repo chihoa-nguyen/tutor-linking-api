@@ -1,7 +1,7 @@
 package com.nchowf.tutorlinking.classes.dto;
 
-import com.nchowf.tutorlinking.parent.dto.ParentResponse;
-import com.nchowf.tutorlinking.utils.Address;
+import com.nchowf.tutorlinking.grade.dto.GradeResponse;
+import com.nchowf.tutorlinking.subject.dto.SubjectResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,22 +9,21 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ClassResponse {
     private Integer id;
-    private ParentResponse parent;
-    private Set<String> subjects;
+    private Set<SubjectResponse> subjects;
     private Integer numberSession;
     private String time;
-    private String grade;
+    private GradeResponse grade;
     private int fee;
-    private Address address;
+    private String address;
     private String positionRequired;
     private String genderRequired;
     private String note;
     private Date createdAt;
-    private Date updatedAt;
 }

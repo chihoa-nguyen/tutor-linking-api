@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,6 +12,6 @@ import java.util.Date;
 public class SubjectResponse {
     private Long id;
     private String name;
-    private Date createdAt;
-    private Date updatedAt;
+//    private Date createdAt;
+//    private Date updatedAt;
 }

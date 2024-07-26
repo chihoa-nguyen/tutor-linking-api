@@ -1,6 +1,6 @@
 package com.nchowf.tutorlinking.review.dto;
 
-import com.nchowf.tutorlinking.classes.dto.ClassResponse;
+import com.nchowf.tutorlinking.classes.dto.ClassDetailResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +17,7 @@ public class ReviewResponse {
     private Date createdAt;
     private Date updatedAt;
     private TutorResponse tutor;
-    private ClassResponse classroom;
+    private ClassDetailResponse classroom;
     private int rating;
     private String comment;
 }

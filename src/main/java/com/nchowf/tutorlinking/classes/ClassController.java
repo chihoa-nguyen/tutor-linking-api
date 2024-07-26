@@ -1,6 +1,7 @@
 package com.nchowf.tutorlinking.classes;
 
 import com.nchowf.tutorlinking.classes.dto.ClassRequest;
+import com.nchowf.tutorlinking.classes.dto.ClassDetailResponse;
 import com.nchowf.tutorlinking.classes.dto.ClassResponse;
 import com.nchowf.tutorlinking.classes.dto.FilterClassRequest;
 import jakarta.validation.Valid;
@@ -17,7 +18,7 @@ public class ClassController {
     private final ClassService classService;
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ClassResponse create(@RequestBody @Valid ClassRequest request){
+    public ClassDetailResponse create(@RequestBody @Valid ClassRequest request){
         return classService.createClass(request);
     }
     @GetMapping("")
@@ -27,7 +28,7 @@ public class ClassController {
     }
     @GetMapping("/parent")
     @ResponseStatus(HttpStatus.FOUND)
-    public List<ClassResponse> getClassesOfThisParent(){
+    public List<ClassDetailResponse> getClassesOfThisParent(){
         return classService.getClassesOfThisParent();
     }
 
@@ -43,7 +44,7 @@ public class ClassController {
     }
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ClassResponse updateById(@PathVariable("id") Integer id, @RequestBody @Valid ClassRequest request){
+    public ClassDetailResponse updateById(@PathVariable("id") Integer id, @RequestBody @Valid ClassRequest request){
         return classService.updateClass(id, request);
     }
     @DeleteMapping("/{id}")

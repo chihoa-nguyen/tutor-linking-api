@@ -1,6 +1,7 @@
 package com.nchowf.tutorlinking.classes;
 
 import com.nchowf.tutorlinking.classes.dto.ClassRequest;
+import com.nchowf.tutorlinking.classes.dto.ClassDetailResponse;
 import com.nchowf.tutorlinking.classes.dto.ClassResponse;
 import com.nchowf.tutorlinking.classes.dto.FilterClassRequest;
 import com.nchowf.tutorlinking.enums.ErrorCode;
@@ -28,7 +29,7 @@ public class ClassService {
     private final ParentService parentService;
     private final TutorService tutorService;
     private final ClassMapper classMapper;
-    public ClassResponse createClass(ClassRequest request) {
+    public ClassDetailResponse createClass(ClassRequest request) {
         Parent parent = parentService.getThisParent();
         List<Subject> subjects = subjectService.getAllById(request.getSubjects());
         Grade grade = gradeService.getById(request.getGradeId());
@@ -36,7 +37,7 @@ public class ClassService {
         classroom.setParent(parent);
         classroom.setSubjects(new HashSet<>(subjects));
         classroom.setGrade(grade);
-        return classMapper.toClassResponse(classRepo.save(classroom));
+        return classMapper.toClassDetailResponse(classRepo.save(classroom));
     }
     public Class getById(Integer id) {
         return classRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
@@ -44,7 +45,11 @@ public class ClassService {
     public ClassResponse getResponseById(Class classroom) {
         return classMapper.toClassResponse(classroom);
     }
-    public ClassResponse updateClass(Integer id, ClassRequest request) {
+    public ClassDetailResponse getDetailsResponseById(Class classroom) {
+        return classMapper.toClassDetailResponse(classroom);
+    }
+
+    public ClassDetailResponse updateClass(Integer id, ClassRequest request) {
         Class classroom = classRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
         Parent parent = parentService.getThisParent();
         if (!classroom.getParent().equals(parent)) {
@@ -57,7 +62,7 @@ public class ClassService {
         List<Subject> subjects = subjectService.getAllById(request.getSubjects());
         classMapper.updateClass(classroom, request);
         classroom.setSubjects(new HashSet<>(subjects));
-        return classMapper.toClassResponse(classRepo.save(classroom));
+        return classMapper.toClassDetailResponse(classRepo.save(classroom));
     }
     public void deleteClass(Integer id) {
         classRepo.deleteById(id);
@@ -71,10 +76,10 @@ public class ClassService {
         classroom.setHasTutor(!classroom.isHasTutor());
         classRepo.save(classroom);
     }
-    public List<ClassResponse> getClassesOfThisParent() {
+    public List<ClassDetailResponse> getClassesOfThisParent() {
         Parent parent = parentService.getThisParent();
         return classRepo.findAllByParent(parent).stream()
-               .map(classMapper::toClassResponse).toList();
+               .map(classMapper::toClassDetailResponse).toList();
     }
     public List<ClassResponse> getClassesSuitableForTutor(){
         Tutor tutor = tutorService.getThisTutor();
