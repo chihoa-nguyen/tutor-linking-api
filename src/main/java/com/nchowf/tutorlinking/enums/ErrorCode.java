@@ -7,32 +7,29 @@ import org.springframework.http.HttpStatusCode;
 
 @Getter
 public enum ErrorCode {
-    INVALID_KEY(1001, "Uncategorized error", HttpStatus.BAD_REQUEST),
-    EMAIL_EXISTED(1002, "Email đã tồn tại", HttpStatus.BAD_REQUEST),
-    USER_NOT_EXISTED(1005, "Người dùng không tồn tại", HttpStatus.NOT_FOUND),
-    UNAUTHENTICATED(1006, "Người dùng chưa xác thực", HttpStatus.UNAUTHORIZED),
-    UNAUTHORIZED(1007, "Bạn không có quyền này", HttpStatus.FORBIDDEN),
-    PASSWORD_WRONG(1016,"Mật khảu không chính xác" , HttpStatus.BAD_REQUEST),
-    PHONE_NUMBER_USED(1018,"Số điện thoại đã được sử dụng", HttpStatus.BAD_REQUEST),
-    CLASS_NOT_FOUND(1019,"Lớp học không tồn tại" , HttpStatus.NOT_FOUND),
-    EMAIL_NOT_FOUND(1020,"Email này chưa đăng ký/xác thực" , HttpStatus.NOT_FOUND),
-    SUBJECT_NOT_FOUND(1021,"Môn học không tồn tại" ,HttpStatus.NOT_FOUND ),
-    SUBJECT_EXISTED(1022,"Môn học đã tồn tại" , HttpStatus.BAD_REQUEST),
-    GRADE_NOT_FOUND(1023,"Khối học không tồn tại" , HttpStatus.NOT_FOUND ),
-    GRADE_EXISTED(1024,"Khối học đã tồn tại" ,HttpStatus.BAD_REQUEST ),
-    NOT_YOUR_CLASS(1025,"Lớp học này không phải của bạn" , HttpStatus.BAD_REQUEST),
-    ALREADY_REGISTERED(1026,"Bạn đã đăng ký nhận lớp này" , HttpStatus.BAD_REQUEST),
-    ENROLLMENT_NOT_FOUND(1027,"Đăng ký nhận lớp không tồn tại" ,HttpStatus.NOT_FOUND ),
-    NOT_YOUR_ENROLLMENT(1028,"Bạn không thể xóa đăng ký của gia sư khác" , HttpStatus.FORBIDDEN),
-    INVALID_ENROLLMENT(1029,"Đăng ký nhận lớp này chưa được giao nên không thể đánh giá gia sư" , HttpStatus.BAD_REQUEST),
-    ALREADY_REVIEWED(1030,"Mỗi lớp chỉ được đánh giá một lần" , HttpStatus.BAD_REQUEST);
-    ErrorCode(int code, String message, HttpStatusCode statusCode) {
-        this.code = code;
+    EMAIL_EXISTED("Email đã tồn tại", HttpStatus.BAD_REQUEST),
+    USER_NOT_EXISTED( "Người dùng không tồn tại", HttpStatus.NOT_FOUND),
+    UNAUTHENTICATED("Người dùng chưa xác thực", HttpStatus.UNAUTHORIZED),
+    UNAUTHORIZED("Bạn không có quyền này", HttpStatus.FORBIDDEN),
+    PASSWORD_WRONG("Mật khảu không chính xác" , HttpStatus.BAD_REQUEST),
+    PHONE_NUMBER_USED("Số điện thoại đã được sử dụng", HttpStatus.BAD_REQUEST),
+    CLASS_NOT_FOUND("Lớp học không tồn tại" , HttpStatus.NOT_FOUND),
+    EMAIL_NOT_FOUND("Email này chưa đăng ký/xác thực" , HttpStatus.NOT_FOUND),
+    SUBJECT_NOT_FOUND("Môn học không tồn tại" ,HttpStatus.NOT_FOUND ),
+    SUBJECT_EXISTED("Môn học đã tồn tại" , HttpStatus.BAD_REQUEST),
+    GRADE_NOT_FOUND("Khối học không tồn tại" , HttpStatus.NOT_FOUND ),
+    GRADE_EXISTED("Khối học đã tồn tại" ,HttpStatus.BAD_REQUEST ),
+    NOT_YOUR_CLASS("Lớp học này không phải của bạn" , HttpStatus.BAD_REQUEST),
+    ALREADY_REGISTERED("Bạn đã đăng ký nhận lớp này" , HttpStatus.BAD_REQUEST),
+    ENROLLMENT_NOT_FOUND("Đăng ký nhận lớp không tồn tại" ,HttpStatus.NOT_FOUND ),
+    NOT_YOUR_ENROLLMENT("Bạn không thể xóa đăng ký của gia sư khác" , HttpStatus.FORBIDDEN),
+    INVALID_ENROLLMENT("Đăng ký nhận lớp này chưa được giao nên không thể đánh giá gia sư" , HttpStatus.BAD_REQUEST),
+    ALREADY_REVIEWED("Mỗi lớp chỉ được đánh giá một lần" , HttpStatus.BAD_REQUEST),
+    USER_NOT_ENABLED("Tài khoản chưa được kích hoạt", HttpStatus.BAD_REQUEST );
+    ErrorCode(String message, HttpStatusCode statusCode) {
         this.message = message;
         this.statusCode = statusCode;
     }
-    @Getter
-    private final int code;
     @Getter
     private final String message;
     private final HttpStatusCode statusCode;

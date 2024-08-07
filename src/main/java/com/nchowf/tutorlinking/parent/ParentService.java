@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -26,7 +25,6 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
     private final ParentMapper parentMapper;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
-
     @Override
     public ParentResponse register(ParentRequest request) {
         if (parentRepo.existsByPhoneNumber(request.getPhoneNumber()))
@@ -37,14 +35,17 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
         parent.setRole(Role.PARENT);
         parent.setPassword(passwordEncoder.encode(request.getPassword()));
         parentRepo.save(parent);
-        Token token = new Token(parent.getId(), Role.PARENT);
-        tokenRepo.save(token);
-        emailService.sendVerificationMail(parent.getName(),
-                parent.getEmail(), token.getToken(),"parent");
         return parentMapper.toParentResponse(parentRepo
                 .save(parent));
     }
-
+    @Override
+    public void sendVerificationEmail(Integer id, String role) {
+        Token token = new Token(id, Role.PARENT);
+        tokenRepo.save(token);
+        ParentResponse parent = getById(id);
+        emailService.sendVerificationMail(parent.getName(),
+                parent.getEmail(), token.getToken(),role);
+    }
     @Override
     public String verifyEmail(String token) {
         Token verificationToken = tokenRepo.findByTokenAndRoleAndAndType(token, Role.PARENT, TokenType.VERIFICATION);
@@ -54,21 +55,18 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
         parentRepo.save(parent);
         return "<p>Địa chỉ email " + parent.getEmail() + " đã được xác minh !</p>";
     }
-
-
     public ParentResponse getById(Integer id) {
         Parent parent = parentRepo.findById(id)
                 .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXISTED)));
         return parentMapper.toParentResponse(parent);
     }
-
     @Override
     public ParentResponse getInforByToken() {
         return parentMapper.toParentResponse(getThisParent());
     }
     public Parent getThisParent(){
         String email = getEmailFromToken();
-        return parentRepo.findByEmailAndIsEnableTrue(email)
+        return parentRepo.findByEmail(email)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
     @Override
@@ -83,7 +81,7 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
     }
     @Override
     public ParentResponse update(ParentUpdateRequest parentRequest) {
-        Parent parent = parentRepo.findByEmailAndIsEnableTrue(getEmailFromToken())
+        Parent parent = parentRepo.findByEmail(getEmailFromToken())
                 .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXISTED)));
         parentMapper.toUpdateParent(parent, parentRequest);
         return parentMapper.toParentResponse(parentRepo
@@ -96,7 +94,9 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
     }
 
     public Parent getParentByEmail(String email) {
-        return parentRepo.findByEmailAndIsEnableTrue(email)
+        Parent parent = parentRepo.findByEmail(email)
                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        if(!parent.isEnable()) throw new AppException(ErrorCode.USER_NOT_ENABLED);
+        return parent;
     }
 }

@@ -16,12 +16,12 @@ public class EmailService {
     private String host;
 
     @Async
-    public void sendVerificationMail(String name, String to, String token, String userType){
+    public void sendVerificationMail(String name, String to, String token, String role){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject("Xác thực email cho tài khoản TutorLinking");
         message.setFrom("tutor.linking@gmail.com");
         message.setTo(to);
-        message.setText(EmailUtils.getVerificationMessage(name, userType ,host, token));
+        message.setText(EmailUtils.getVerificationMessage(name, role ,host, token));
         emailSender.send(message);
     }
     @Async

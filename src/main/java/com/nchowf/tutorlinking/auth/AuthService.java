@@ -5,19 +5,25 @@ import com.nchowf.tutorlinking.enums.Role;
 import com.nchowf.tutorlinking.enums.TokenType;
 import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.parent.ParentService;
+import com.nchowf.tutorlinking.parent.dto.ParentRequest;
+import com.nchowf.tutorlinking.parent.dto.ParentResponse;
 import com.nchowf.tutorlinking.token.JwtService;
 import com.nchowf.tutorlinking.token.RefreshTokenRequest;
 import com.nchowf.tutorlinking.token.Token;
 import com.nchowf.tutorlinking.token.TokenRepo;
 import com.nchowf.tutorlinking.tutor.TutorService;
+import com.nchowf.tutorlinking.tutor.dto.TutorDetailResponse;
+import com.nchowf.tutorlinking.tutor.dto.TutorRequest;
 import com.nchowf.tutorlinking.user.User;
 import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +63,17 @@ public class AuthService {
         revokeAllUserTokens(user);
         saveToken(user, token, TokenType.ACCESS);
         return new AuthResponse(jwtToken, refreshToken);
+    }
+    public Void sendEmail(String role, Integer id){
+        if(role.equals("parent"))  parentService.sendVerificationEmail(id, role);
+        else tutorService.sendVerificationEmail(id, role);
+        return null;
+    }
+    public ParentResponse parentRegister(ParentRequest request){
+        return parentService.register(request);
+    }
+    public TutorDetailResponse tutorRegister(TutorRequest request) throws IOException, ExecutionException, InterruptedException {
+        return tutorService.register(request);
     }
     private User retrieveUserByEmailAndRole(String email, String role) {
         return (role.toUpperCase().equals(Role.TUTOR.toString())) ? tutorService.getTutorByEmail(email) : parentService.getParentByEmail(email);

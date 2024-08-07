@@ -11,8 +11,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ClassMapper {
@@ -41,19 +41,27 @@ public interface ClassMapper {
         return position != null ? position.value() : null;
     }
     @Named("subjectsToString")
-    static Set<String> subjectsToString(Set<Subject> subjects){
-        return subjects.stream().map(Subject::getName)
-                .collect(Collectors.toSet());
+    static String subjectsToString(Set<Subject> subjects){
+        StringBuilder result = new StringBuilder();
+        for (Subject subject : subjects) {
+            result.append(subject.getName()).append(", ");
+        }
+        result.deleteCharAt(result.lastIndexOf(", "));
+        return result.toString();
     }
     @Named("addressToString")
     static String addressToString(Address address){
-        String fullAddress = String.format("%s, %s, %s, %s", address.getStreetNumber(), address.getWard(), address.getWard(), address.getCity());
+        String fullAddress = String.format("%s, %s, %s, %s", address.getStreetNumber(), address.getWard(), address.getDistrict(), address.getCity());
         int firstSpaceIndex = fullAddress.indexOf(" ");
         if (firstSpaceIndex != -1) {
             return fullAddress.substring(firstSpaceIndex + 1);
         } else {
             return fullAddress;
         }
+    }
+    @Named("getFullAddress")
+    static String getFullAddress(Address address){
+        return String.format("%s, %s, %s, %s", address.getStreetNumber(), address.getWard(), address.getDistrict(), address.getCity());
     }
     @Mapping(target = "parent", ignore = true)
     @Mapping(target = "subjects", ignore = true)
@@ -69,6 +77,9 @@ public interface ClassMapper {
     ClassResponse toClassResponse(Class classroom);
     @Mapping(target = "genderRequired", source = "genderRequired", qualifiedByName = "genderToString")
     @Mapping(target = "positionRequired", source = "positionRequired", qualifiedByName = "positionToString")
+    @Mapping(target = "subjects", source = "subjects", qualifiedByName = "subjectsToString")
+    @Mapping(target = "address", source = "address", qualifiedByName = "getFullAddress")
+    @Mapping(target = "grade", source = "grade.name")
     ClassDetailResponse toClassDetailResponse(Class classroom);
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "parent", ignore = true)

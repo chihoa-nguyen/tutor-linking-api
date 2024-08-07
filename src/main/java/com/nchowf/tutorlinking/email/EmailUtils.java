@@ -2,6 +2,7 @@ package com.nchowf.tutorlinking.email;
 
 import com.nchowf.tutorlinking.enrollment.Enrollment;
 import com.nchowf.tutorlinking.subject.Subject;
+import com.nchowf.tutorlinking.utils.Address;
 
 public class EmailUtils {
     public static String getVerificationMessage(String name, String userType, String host, String token) {
@@ -11,17 +12,17 @@ public class EmailUtils {
                 + "\n\nXin cảm ơn,"
                 + "\nTutorLinking";
     }
-
     public static String getVerificationUrl(String host, String userType, String token) {
         return host + userType + "/verify?token=" + token;
     }
-
     public static String getClassDetails(Enrollment enrollment) {
         StringBuilder subjects = new StringBuilder();
         for (Subject subject : enrollment.getClassroom().getSubjects()) {
             subjects.append(subject.getName()).append(", ");
         }
         subjects.deleteCharAt(subjects.lastIndexOf(", "));
+        Address address = enrollment.getClassroom().getAddress();
+        String fullAddress = String.format("%s, %s, %s, %s", address.getStreetNumber(), address.getWard(), address.getDistrict(), address.getCity());
         return "Kính gửi gia sư " + enrollment.getTutor().getName() + ","
                 + "\nPhụ huynh đã chấp nhận đăng ký nhận lớp của bạn."
                 + "\n\nThông tin chi tiết lớp dạy:"
@@ -33,7 +34,7 @@ public class EmailUtils {
                 + "\n- Mức học phí: " + enrollment.getClassroom().getFee() + " đồng/buổi"
                 + "\n- Yêu cầu chức vụ: " + enrollment.getClassroom().getPositionRequired().value()
                 + "\n- Yêu cầu giới tính: " + enrollment.getClassroom().getGenderRequired().value()
-                + "\n- Địa điểm học: " + enrollment.getClassroom().getAddress()
+                + "\n- Địa điểm học: " + fullAddress
                 + "\n\nThông tin liên hệ phụ huynh:"
                 + "\n- Họ và tên: " + enrollment.getClassroom().getParent().getName()
                 + "\n- Số điện thoại: " + enrollment.getClassroom().getParent().getPhoneNumber()

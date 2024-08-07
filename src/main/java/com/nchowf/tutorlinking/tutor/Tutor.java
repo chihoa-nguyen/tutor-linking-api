@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -24,9 +25,7 @@ public class Tutor extends User {
     private String birthday;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    @Column(nullable = false)
     private String avt;
-    @Column(nullable = false)
     private String degree;
     @Column(nullable = false)
     private String address;
@@ -38,9 +37,11 @@ public class Tutor extends User {
     private Position position;
     @Column(length = 10, nullable = false)
     private String phoneNumber;
+    @Column(nullable = false)
+    private String province;
     @Type(JsonType.class)
     @Column(columnDefinition = "json", nullable = false)
-    private Set<String> teachingArea;
+    private List<String> teachingArea;
     @ManyToMany( fetch = FetchType.LAZY )
     @JoinTable(name ="tutor_subject")
     private Set<Subject> subjects;

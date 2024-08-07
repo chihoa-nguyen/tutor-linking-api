@@ -11,9 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApiResponse<T>{
+public class ErrorResponse<T>{
     @Builder.Default
-    private String status = "success";
-    private String message;
-    private T data;
+    private String status = "error";
+    private T message;
 }

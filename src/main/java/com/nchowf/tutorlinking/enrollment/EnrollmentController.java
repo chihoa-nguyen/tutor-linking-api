@@ -13,7 +13,6 @@ import java.util.List;
 public class EnrollmentController {
     private final EnrollmentService enrollmentService;
     @PostMapping("/{classId}")
-    @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<EnrollmentResponse> add(@PathVariable Integer classId){
         return ApiResponse.<EnrollmentResponse>builder().
                 message("Đăng kí nhận lớp thành công")
@@ -21,7 +20,6 @@ public class EnrollmentController {
                 .build();
     }
     @GetMapping("/{classId}")
-    @ResponseStatus(HttpStatus.FOUND)
     public ApiResponse<List<EnrollmentResponse>> getEnrollmentsClass(@PathVariable Integer classId){
         return ApiResponse.<List<EnrollmentResponse>>builder()
                .message("Lấy danh sách gia sư đăng kí nhận lớp thành công")
@@ -29,25 +27,35 @@ public class EnrollmentController {
                .build();
     }
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<EnrollmentResponse> accept(@PathVariable(value = "id") Integer id){
-        return ApiResponse.<EnrollmentResponse>builder()
+    public ApiResponse<Void> accept(@PathVariable(value = "id") Integer id){
+        return ApiResponse.<Void>builder()
                 .message("Duyệt gia sư nhận lớp thành công")
                 .data(enrollmentService.acceptEnrollment(id))
                 .build();
     }
+    @PostMapping("/send-mail/{id}")
+    public ApiResponse<Void> sendMail(@PathVariable Integer id){
+        return ApiResponse.<Void>builder()
+                .message("Gửi mail thông báo thành công")
+                .data(enrollmentService.sendAcceptMail(id))
+                .build();
+    }
     @GetMapping("/tutor")
-    @ResponseStatus(HttpStatus.FOUND)
     public ApiResponse<List<EnrollmentResponse>> getEnrollmentsTutor(){
         return ApiResponse.<List<EnrollmentResponse>>builder()
                .message("Lấy danh sách lớp đăng ký thành công")
                .data(enrollmentService.getEnrollmentsOfTutor())
                .build();
     }
-    @PutMapping
+    @GetMapping("/tutor/{tutor_id}")
+    public ApiResponse<List<EnrollmentResponse>> getClassTeaching(@PathVariable Integer tutor_id){
+        return ApiResponse.<List<EnrollmentResponse>>builder()
+                .message("Lấy danh sách lớp gia sư đang dạy thành công")
+                .data(enrollmentService.getClassTeachingOfTutor(tutor_id))
+                .build();
+    }
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable(value = "id") Integer id){
+    public void delete(@PathVariable Integer id){
         enrollmentService.deleteEnrollment(id);
     }
 }

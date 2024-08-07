@@ -18,12 +18,12 @@ import java.util.Set;
 public class ClassDetailResponse {
     private Integer id;
     private ParentResponse parent;
-    private Set<SubjectResponse> subjects;
+    private String subjects;
     private Integer numberSession;
     private String time;
-    private GradeResponse grade;
+    private String grade;
     private int fee;
-    private Address address;
+    private String address;
     private String positionRequired;
     private String genderRequired;
     private String note;

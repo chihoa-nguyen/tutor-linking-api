@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -35,9 +36,9 @@ public class TutorUpdateRequest extends UserUpdateRequest {
     @Max(value = 2, message = "Chức vụ là 0 (Sinh viên), 1 (Giáo viên) hoặc là 2 (Sinh viên tốt nghiệp)")
     private int position;
     @NotEmpty(message = "Số môn học tối thiểu là 1")
-    private Set<Integer> subjects;
+    private List<Integer> subjects;
     @NotEmpty(message = "Số khối học tối thiểu là 1")
-    private Set<Integer> grades;
+    private List<Integer> grades;
     @NotEmpty(message = "Khu vực dạy tối thiểu là 1")
     private Set<String> teachingArea;
     @NotBlank(message = "Mô tả ưu điểm không được thiếu")

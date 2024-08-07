@@ -12,8 +12,6 @@ import org.hibernate.validator.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewRequest {
-    @NotNull(message = "Mã đăng ký nhận lớp không đựợc trống")
-    private Integer enrollmentId;
     @Min(value = 1, message= "Số sao từ 1 tới 5")
     @Max(value = 5, message= "Số sao từ 1 tới 5")
     private int rating;

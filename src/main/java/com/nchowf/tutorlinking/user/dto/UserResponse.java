@@ -9,6 +9,7 @@ import java.util.Date;
 @SuperBuilder
 public class UserResponse {
     private Integer id;
+    private String role;
     private String email;
     private String name;
     private String phoneNumber;

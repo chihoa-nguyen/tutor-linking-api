@@ -18,14 +18,12 @@ public class ClassSpecification {
             return subjectJoin.get("id").in(subjectIds);
         };
     }
-
     public static Specification<Class> hasGradeIds(Collection<Integer> gradeIds) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.and(
                 root.get("grade").isNotNull(),
                 root.get("grade").get("id").in(gradeIds)
         );
     }
-
     public static Specification<Class> hasGender(Gender gender) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.equal(root.get("genderRequired"), gender);
@@ -33,14 +31,12 @@ public class ClassSpecification {
             return predicate;
         };
     }
-
     public static Specification<Class> hasPositions(Collection<Position> positions) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.and(
                 root.get("positionRequired").isNotNull(),
                 root.get("positionRequired").in(positions)
         );
     }
-
     public static Specification<Class> hasDistricts(Collection<String> districts) {
         return (root, query, criteriaBuilder) -> {
             Predicate districtPredicate =
@@ -50,7 +46,6 @@ public class ClassSpecification {
             return districtPredicate;
         };
     }
-
     public static Specification<Class> hasCity(String city) {
         return (root, query, criteriaBuilder) -> {
             Predicate cityPredicate = criteriaBuilder.equal(
@@ -60,7 +55,6 @@ public class ClassSpecification {
             return cityPredicate;
         };
     }
-
     public static Specification<Class> hasTutorFalse() {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("hasTutor"), Boolean.FALSE);
     }

@@ -9,6 +9,8 @@ import java.util.concurrent.ExecutionException;
 
 public interface UserService<T extends UserRequest, U extends UserUpdateRequest, R extends UserResponse> {
     R register(T request) throws IOException, ExecutionException, InterruptedException;
+    void sendVerificationEmail(Integer id, String role);
+
     String verifyEmail(String token);
     R update(U request);
     R getInforByToken();

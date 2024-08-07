@@ -8,14 +8,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClassRequest {
     @NotNull(message = "Môn học không được thiếu")
-    private Set<Integer> subjects;
+    private List<Integer> subjects;
     @NotNull(message="Số buổi dạy không được thiếu")
     @Min(value = 1, message ="Số buổi dạy tối thiếu là 1")
     private Integer numberSession;

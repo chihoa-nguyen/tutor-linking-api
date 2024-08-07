@@ -19,8 +19,10 @@ public class TutorResponse {
     private String position;
     private String universityName;
     private String major;
-    private Set<String> subjects;
-    private Set<String> grades;
-    private Set<String> teachingArea;
+    private String subjects;
+    private String grades;
+    private String province;
+    private String teachingArea;
     private String description;
+    private float avgRating;
 }

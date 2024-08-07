@@ -16,19 +16,16 @@ public class GradeController {
     private final GradeService gradeService;
 
     @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
     public GradeResponse create(@RequestBody @Valid GradeRequest request) {
         return gradeService.addGrade(request);
     }
 
     @GetMapping("")
-    @ResponseStatus(HttpStatus.FOUND)
     public List<GradeResponse> getGrades() {
         return gradeService.getAll();
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(value = HttpStatus.FOUND)
     public GradeResponse getById(@PathVariable("id") Integer id) {
         return gradeService.getResponseById(gradeService.getById(id));
     }
@@ -39,7 +36,6 @@ public class GradeController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Integer id) {
         gradeService.delete(id);
     }

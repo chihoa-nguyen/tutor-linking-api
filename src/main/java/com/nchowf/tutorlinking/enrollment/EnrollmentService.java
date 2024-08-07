@@ -36,24 +36,39 @@ public class EnrollmentService {
     }
     public List<EnrollmentResponse> getEnrollmentsOfClass(Integer classId){
         Class classroom = classService.getById(classId);
+        if(!classService.isOwnerClass(classroom)) throw new AppException(ErrorCode.NOT_YOUR_CLASS);
         List<Enrollment> enrollments = enrollmentRepo.findAllByClassroom(classroom);
         return enrollments.stream()
                 .map(enrollmentMapper::toEnrollmentResponse).toList();
     }
-    public EnrollmentResponse acceptEnrollment(Integer id) {
+    public Void acceptEnrollment(Integer id) {
         Enrollment enrollment = enrollmentRepo.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.ENROLLMENT_NOT_FOUND));
         enrollment.setStatus(Status.APPROVED);
-        emailService.sendClassDetailsMail(enrollment, enrollment.getTutor().getEmail());
         classService.updateHasTutor(enrollment.getClassroom().getId());
-        enrollmentRepo.rejectOtherEnrollments(enrollment.getId(), enrollment.getTutor().getId());
-        return enrollmentMapper.toEnrollmentResponse(enrollmentRepo.save(enrollment));
+        enrollmentRepo.rejectOtherEnrollments(enrollment.getClassroom().getId(), enrollment.getTutor().getId());
+        enrollmentRepo.save(enrollment);
+        return null;
+    }
+    public Void sendAcceptMail(Integer id){
+        Enrollment enrollment = enrollmentRepo.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.ENROLLMENT_NOT_FOUND));
+        emailService.sendClassDetailsMail(enrollment, enrollment.getTutor().getEmail());
+        return null;
     }
     public List<EnrollmentResponse> getEnrollmentsOfTutor(){
         Tutor tutor = tutorService.getThisTutor();
         List<Enrollment> enrollments = enrollmentRepo.findAllByTutor(tutor);
         return enrollments.stream()
                .map(enrollmentMapper::toEnrollmentResponse).toList();
+    }
+    public List<EnrollmentResponse> getClassTeachingOfTutor(Integer id){
+        Tutor tutor = tutorService.getTutor(id);
+        List<Enrollment> enrollments = enrollmentRepo.findAllByTutor(tutor);
+        return enrollments.stream()
+                .filter(e -> e.getStatus() == Status.APPROVED)
+                .map(enrollmentMapper::toEnrollmentResponse)
+                .toList();
     }
     public void deleteEnrollment(Integer id) {
         Enrollment enrollment = enrollmentRepo.findById(id)
@@ -64,7 +79,6 @@ public class EnrollmentService {
         }
         enrollmentRepo.delete(enrollment);
     }
-
     public Enrollment findById(Integer enrollmentId) {
         return enrollmentRepo.findById(enrollmentId)
                 .orElseThrow(()->new AppException(ErrorCode.ENROLLMENT_NOT_FOUND));

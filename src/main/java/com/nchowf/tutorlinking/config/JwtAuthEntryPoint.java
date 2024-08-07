@@ -20,7 +20,7 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         ApiResponse<?> apiResponse = ApiResponse.builder()
-                .code(errorCode.getCode())
+                //.code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .build();
         ObjectMapper objectMapper = new ObjectMapper();

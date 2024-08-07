@@ -1,12 +1,10 @@
 package com.nchowf.tutorlinking.parent;
 
-import com.nchowf.tutorlinking.parent.dto.ParentRequest;
 import com.nchowf.tutorlinking.parent.dto.ParentResponse;
 import com.nchowf.tutorlinking.parent.dto.ParentUpdateRequest;
 import com.nchowf.tutorlinking.utils.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,21 +14,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ParentController {
     private final ParentService parentService;
-
-    @PostMapping("/register")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public ApiResponse<ParentResponse> add(@RequestBody @Valid ParentRequest parentRequest) {
-        return ApiResponse.<ParentResponse>builder()
-                .message("Tạo mới phụ huynh thành công")
-                .data(parentService.register(parentRequest))
-                .build();
-    }
     @GetMapping("/verify")
     public String verify(@RequestParam String token){
         return parentService.verifyEmail(token);
     }
     @GetMapping("")
-    @ResponseStatus(value = HttpStatus.FOUND)
     public ApiResponse<List<ParentResponse>> getAll() {
         return ApiResponse.<List<ParentResponse>>builder()
                 .message("Lấy danh sách phụ huynh thành công")
@@ -39,24 +27,20 @@ public class ParentController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(value = HttpStatus.FOUND)
     public ApiResponse<ParentResponse> getById(@PathVariable("id") Integer id) {
         return ApiResponse.<ParentResponse>builder()
                 .message("Lấy thông tin của phụ huynh thành công")
                 .data(parentService.getById(id))
                 .build();
     }
-    @GetMapping("/infor")
-    @ResponseStatus(value = HttpStatus.FOUND)
+    @GetMapping("/me")
     public ApiResponse<ParentResponse> getInfor() {
         return ApiResponse.<ParentResponse>builder()
                 .message("Lấy thông tin của phụ huynh thành công")
                 .data(parentService.getInforByToken())
                 .build();
     }
-
     @PutMapping("")
-    @ResponseStatus(value = HttpStatus.OK)
     public ApiResponse<ParentResponse> update(@RequestBody @Valid ParentUpdateRequest parentRequest) {
         return ApiResponse.<ParentResponse>builder()
                 .message("Cập nhật thông tin thành công")
@@ -64,7 +48,6 @@ public class ParentController {
                 .build();
     }
     @DeleteMapping("/{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Integer id) {
         parentService.delete(id);
     }

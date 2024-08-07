@@ -5,7 +5,6 @@ import com.nchowf.tutorlinking.review.dto.ReviewResponse;
 import com.nchowf.tutorlinking.utils.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,16 +14,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
-    @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<ReviewResponse> create(@RequestBody @Valid ReviewRequest request){
+    @PostMapping("/{id}")
+    public ApiResponse<ReviewResponse> create(@RequestBody @Valid ReviewRequest request, @PathVariable Integer id){
         return ApiResponse.<ReviewResponse>builder()
                 .message("Đã thêm đánh giá gia sư")
-                .data(reviewService.addReview(request))
+                .data(reviewService.addReview(request, id))
                 .build();
     }
     @GetMapping("/tutor/{tutorId}")
-    @ResponseStatus(HttpStatus.FOUND)
     public ApiResponse<List<ReviewResponse>> getReviewsOfTutor(@PathVariable Integer tutorId){
         return ApiResponse.<List<ReviewResponse>>builder()
                .message("Lấy danh sách đánh giá của gia sư thành công")

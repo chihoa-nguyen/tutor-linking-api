@@ -17,19 +17,15 @@ import com.nchowf.tutorlinking.tutor.dto.TutorRequest;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorUpdateRequest;
 import com.nchowf.tutorlinking.user.UserService;
-import com.nchowf.tutorlinking.utils.UploadImgService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -39,7 +35,6 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     private final TokenRepo tokenRepo;
     private final SubjectService subjectService;
     private final GradeService gradeService;
-    private final UploadImgService uploadImgService;
     private final EmailService emailService;
     private final TutorMapper tutorMapper;
     private final PasswordEncoder passwordEncoder;
@@ -49,29 +44,31 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     private String DEGREE_FOLDER_ID;
     private final JwtService jwtService;
     @Override
-    public TutorDetailResponse register(TutorRequest request) throws IOException, ExecutionException, InterruptedException {
+    public TutorDetailResponse register(TutorRequest request){
         if (tutorRepo.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_NUMBER_USED);
         if (tutorRepo.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         List<Subject> subjects = subjectService.getAllById(request.getSubjects());
         List<Grade> grades = gradeService.getAllById(request.getGrades());
-        File[] files = prepareFileToUpload(request);
-        String[] url = uploadFileToDrive(files[0], files[1]);
         Tutor tutor = tutorMapper.toTutor(request);
         tutor.setRole(Role.TUTOR);
         tutor.setPassword(passwordEncoder.encode(request.getPassword()));
         tutor.setSubjects(new HashSet<>(subjects));
         tutor.setGrades(new HashSet<>(grades));
-        tutor.setAvt(url[0]);
-        tutor.setDegree(url[1]);
-        tutorRepo.save(tutor);
-        Token token = new Token(tutor.getId(), Role.TUTOR);
-        tokenRepo.save(token);
-        emailService.sendVerificationMail(tutor.getName(), tutor.getEmail(),
-                token.getToken(), "tutor");
         return tutorMapper.tuTutorDetailResponse(tutorRepo
                 .save(tutor));
+    }
+    @Override
+    public void sendVerificationEmail(Integer id, String role) {
+        Tutor tutor = tutorRepo.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+        Token token = new Token(id, Role.TUTOR);
+        tokenRepo.save(token);
+        emailService.sendVerificationMail(tutor.getName(), tutor.getEmail(),
+                token.getToken(), role);
+    }
+    public void uploadAndUpdateTutorImage(Integer id, TutorRequest request) throws ExecutionException, InterruptedException, IOException {
+
     }
     @Override
     public String verifyEmail(String token) {
@@ -82,41 +79,12 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         tutorRepo.save(tutor);
         return "<p>Địa chỉ email " + tutor.getEmail()+" đã được xác minh</p>";
     }
-    private File[] prepareFileToUpload(TutorRequest request) throws IOException {
-        File tempAvtFile = File.createTempFile("avt_", null);
-        File tempDegreeFile = File.createTempFile("degree_", null);
-        request.getAvt().transferTo(tempAvtFile);
-        request.getDegree().transferTo(tempDegreeFile);
-        return new File[]{tempAvtFile, tempDegreeFile};
-    }
-
-    private String[] uploadFileToDrive(File tempImgFile, File tempEBookFile) throws ExecutionException, InterruptedException {
-        CompletableFuture<String> avtUploadFuture = CompletableFuture.supplyAsync(() -> {
-            try {
-                return uploadImgService.uploadToDrive(tempImgFile, AVT_FOLDER_ID);
-            } catch (IOException | GeneralSecurityException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        CompletableFuture<String> degreeUploadFuture = CompletableFuture.supplyAsync(() -> {
-            try {
-                return uploadImgService.uploadToDrive(tempEBookFile, DEGREE_FOLDER_ID);
-            } catch (IOException | GeneralSecurityException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        String urlImg = avtUploadFuture.get();
-        String urlEbook = degreeUploadFuture.get();
-        tempImgFile.delete();
-        tempEBookFile.delete();
-        return new String[]{urlImg, urlEbook};
-    }
 
     @Override
     public TutorDetailResponse update(TutorUpdateRequest request) {
         if (tutorRepo.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_NUMBER_USED);
-        Tutor tutor = tutorRepo.findByEmailAndIsEnableTrue(getEmailFromToken())
+        Tutor tutor = tutorRepo.findByEmail(getEmailFromToken())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         List<Subject> subjects = subjectService.getAllById(request.getSubjects());
         List<Grade> grades = gradeService.getAllById(request.getGrades());
@@ -129,23 +97,22 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
 //        tutor.setDegree(url[1]);
         return tutorMapper.tuTutorDetailResponse(tutorRepo.save(tutor));
     }
-
-
     public TutorResponse getById(Integer id){
-        Tutor tutor = tutorRepo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        return tutorMapper.tuTutorResponse(tutor);
+        return tutorMapper.tuTutorResponse(getTutor(id));
     }
-
+    public Tutor getTutor(Integer id){
+        return  tutorRepo.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+    }
     public Tutor getThisTutor(){
         String email = getEmailFromToken();
-        return tutorRepo.findByEmailAndIsEnableTrue(email)
+        return tutorRepo.findByEmail(email)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
     @Override
     public TutorDetailResponse getInforByToken() {
         String email = getEmailFromToken();
-        Tutor tutor = tutorRepo.findByEmailAndIsEnableTrue(email).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+        Tutor tutor = tutorRepo.findByEmail(email).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
         return tutorMapper.tuTutorDetailResponse(tutor);
     }
 
@@ -153,7 +120,6 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     public String getEmailFromToken() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
-
     public List<TutorResponse> getAll() {
         return tutorRepo.findAll().stream()
                 .map(tutorMapper::tuTutorResponse).toList();
@@ -168,9 +134,10 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         tutorRepo.delete(tutor);
     }
-
     public Tutor getTutorByEmail(String email) {
-        return tutorRepo.findByEmailAndIsEnableTrue(email)
+        Tutor tutor = tutorRepo.findByEmail(email)
                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        if(!tutor.isEnable()) throw new AppException(ErrorCode.USER_NOT_ENABLED);
+        return tutor;
     }
 }

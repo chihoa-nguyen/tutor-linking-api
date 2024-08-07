@@ -1,14 +1,13 @@
 package com.nchowf.tutorlinking.grade;
 
-import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.enums.ErrorCode;
+import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.grade.dto.GradeRequest;
 import com.nchowf.tutorlinking.grade.dto.GradeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +25,7 @@ public class GradeService {
         return gradeRepo.findAll().stream()
                 .map(gradeMapper::toGradeResponse).toList();
     }
-    public List<Grade> getAllById(Set<Integer> gradeIds){
+    public List<Grade> getAllById(List<Integer> gradeIds){
         return gradeRepo.findAllById(gradeIds);
     }
     public Grade getById(Integer id){

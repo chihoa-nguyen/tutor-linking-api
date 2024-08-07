@@ -1,14 +1,13 @@
 package com.nchowf.tutorlinking.subject;
 
-import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.enums.ErrorCode;
+import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.subject.dto.SubjectRequest;
 import com.nchowf.tutorlinking.subject.dto.SubjectResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class SubjectService {
     public List<SubjectResponse> getALl() {
         return subjectRepo.findAll().stream().map(subjectMapper::toSubjectResponse).toList();
     }
-    public List<Subject> getAllById(Set<Integer> subjectIds){
+    public List<Subject> getAllById(List<Integer> subjectIds){
         return subjectRepo.findAllById(subjectIds);
     }
     public SubjectResponse getById(Integer id) {

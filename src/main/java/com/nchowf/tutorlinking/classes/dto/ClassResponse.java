@@ -6,14 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ClassResponse {
     private Integer id;
-    private Set<String> subjects;
+    private String subjects;
     private Integer numberSession;
     private String time;
     private String grade;

@@ -35,7 +35,7 @@ jwt:
   expiration-time: 86400000 # a day
   refreshable-time: 604800000 # 7 days
 gg-driver:
-  root-url: "https://drive.google.com/uc?export=view&id="
+
   avt-folder-id: "1mymQUalzbrRICbe1-PNEJeUu75xsE9uV"
   degree-folder-id: "15YCQUW-p617aC4LhRWWiBgeN9ANwptbl"
 

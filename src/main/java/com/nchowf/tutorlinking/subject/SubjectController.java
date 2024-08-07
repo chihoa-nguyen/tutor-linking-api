@@ -4,7 +4,6 @@ import com.nchowf.tutorlinking.subject.dto.SubjectRequest;
 import com.nchowf.tutorlinking.subject.dto.SubjectResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,19 +13,16 @@ import java.util.List;
 public class SubjectController {
     private final SubjectService subjectService;
     @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
     public SubjectResponse create(@RequestBody @Valid SubjectRequest subjectRequest) {
         return subjectService.create(subjectRequest);
     }
 
     @GetMapping("")
-    //@ResponseStatus(HttpStatus.FOUND)
     public List<SubjectResponse> getSubjects() {
         return subjectService.getALl();
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(value = HttpStatus.FOUND)
     public SubjectResponse getById(@PathVariable("id") Integer id) {
         return subjectService.getById(id);
     }
@@ -35,7 +31,6 @@ public class SubjectController {
         return subjectService.updateSubject(id, request);
     }
     @DeleteMapping("/{id}")
-    @ResponseStatus(value=HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Integer id) {
         subjectService.delete(id);
     }

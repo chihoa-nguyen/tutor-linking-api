@@ -45,10 +45,9 @@ public class ClassService {
     public ClassResponse getResponseById(Class classroom) {
         return classMapper.toClassResponse(classroom);
     }
-    public ClassDetailResponse getDetailsResponseById(Class classroom) {
+    public ClassDetailResponse getDetailsById(Class classroom) {
         return classMapper.toClassDetailResponse(classroom);
     }
-
     public ClassDetailResponse updateClass(Integer id, ClassRequest request) {
         Class classroom = classRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
         Parent parent = parentService.getThisParent();
@@ -73,7 +72,7 @@ public class ClassService {
     }
     public void updateHasTutor(Integer classId) {
         Class classroom = classRepo.findById(classId).orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
-        classroom.setHasTutor(!classroom.isHasTutor());
+        classroom.setHasTutor(true);
         classRepo.save(classroom);
     }
     public List<ClassDetailResponse> getClassesOfThisParent() {
@@ -85,5 +84,9 @@ public class ClassService {
         Tutor tutor = tutorService.getThisTutor();
         return classRepo.getClassesSuitableForTutor(tutor.getId())
                 .stream().map(classMapper::toClassResponse).toList();
+    }
+    public boolean isOwnerClass(Class classroom){
+        Parent parent = parentService.getThisParent();
+        return classroom.getParent().equals(parent);
     }
 }

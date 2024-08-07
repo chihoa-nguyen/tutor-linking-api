@@ -18,8 +18,8 @@ public class ReviewService {
     private final ReviewRepo reviewRepo;
     private final ReviewMapper reviewMapper;
     private final EnrollmentService enrollmentService;
-    public ReviewResponse addReview(ReviewRequest request){
-        Enrollment enrollment = enrollmentService.findById(request.getEnrollmentId());
+    public ReviewResponse addReview(ReviewRequest request, Integer enrollment_id){
+        Enrollment enrollment = enrollmentService.findById(enrollment_id);
         if(enrollment.getStatus() != Status.APPROVED){
             throw new AppException(ErrorCode.INVALID_ENROLLMENT);
         }
@@ -30,10 +30,8 @@ public class ReviewService {
         review.setEnrollment(enrollment);
         reviewRepo.save(review);
         ReviewResponse reviewResponse = reviewMapper.toReviewResponse(review);
-        EnrollmentResponse enrollmentResponse = enrollmentService.getEnrollmentResponse(enrollment);
-        reviewResponse.setTutor(enrollmentResponse.getTutor());
-        reviewResponse.setClassroom(enrollmentResponse.getClassroom());
-        reviewRepo.updateAvgRatingTutor(enrollmentResponse.getTutor().getId());
+        reviewResponse.setParentName(review.getEnrollment().getClassroom().getParent().getName());
+        reviewRepo.updateAvgRatingTutor(review.getEnrollment().getTutor().getId());
         return reviewResponse;
     }
     public List<ReviewResponse> getReviewsByTutorId(Integer tutorId) {

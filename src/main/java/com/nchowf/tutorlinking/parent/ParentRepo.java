@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface ParentRepo extends JpaRepository<Parent,Integer> {
     boolean existsByPhoneNumber(String phoneNumber);
     boolean existsByEmail(String email);
-    Optional<Parent> findByEmailAndIsEnableTrue(String email);
+    Optional<Parent> findByEmail(String email);
     List<Parent> findAllByIsEnableTrue();
 }

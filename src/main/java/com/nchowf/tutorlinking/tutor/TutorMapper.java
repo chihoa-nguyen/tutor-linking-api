@@ -10,7 +10,7 @@ import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorUpdateRequest;
 import org.mapstruct.*;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.WARN,
@@ -38,17 +38,32 @@ public interface TutorMapper {
         return position != null ? position.value() : null;
     }
 
-        @Named("subjectsToString")
-    static Set<String> subjectsToString(Set<Subject> subjects){
-        Set<String> subjectNames = new HashSet<>();
-        subjects.forEach(subject -> subjectNames.add(subject.getName()));
-        return subjectNames;
+    @Named("subjectsToString")
+    static String subjectsToString(Set<Subject> subjects){
+        StringBuilder result = new StringBuilder();
+        for (Subject subject : subjects) {
+            result.append(subject.getName()).append(", ");
+        }
+        result.deleteCharAt(result.lastIndexOf(", "));
+        return result.toString();
     }
     @Named("gradesToString")
-    static Set<String> gradesToString(Set<Grade> grades){
-        Set<String> gradeNames = new HashSet<>();
-        grades.forEach(grade -> gradeNames.add(grade.getName()));
-        return gradeNames;
+    static String gradesToString(Set<Grade> grades){
+        StringBuilder result = new StringBuilder();
+        for (Grade grade : grades) {
+            result.append(grade.getName()).append(", ");
+        }
+        result.deleteCharAt(result.lastIndexOf(", "));
+        return result.toString();
+    }
+    @Named("teachingAreaToString")
+    static String teachingAreaToString(List<String> teachingArea){
+        StringBuilder result = new StringBuilder();
+        for (String area : teachingArea) {
+            result.append(area).append(", ");
+        }
+        result.deleteCharAt(result.lastIndexOf(", "));
+        return result.toString();
     }
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "subjects", ignore = true)
@@ -67,6 +82,8 @@ public interface TutorMapper {
     @Mapping(target = "position", source = "position", qualifiedByName = "positionToString")
     @Mapping(target = "subjects", source = "subjects", qualifiedByName = "subjectsToString")
     @Mapping(target = "grades", source = "grades", qualifiedByName = "gradesToString")
+    @Mapping(target = "teachingArea", source = "teachingArea", qualifiedByName = "teachingAreaToString")
+
     TutorResponse tuTutorResponse(Tutor tutor);
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "subjects", ignore = true)

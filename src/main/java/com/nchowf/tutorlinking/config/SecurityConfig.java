@@ -20,7 +20,8 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private static final String[] PUBLIC_ENDPOINTS = {"/auth/**","/subject","/grade","api/v1/class","/parent/login", "/tutor/login", "/parent/register", "/tutor/register","/tutor/verify","/parent/verify"};
+    private static final String[] GET_PUBLIC_ENDPOINTS = {"/subject","/grade"};
+    private static final String[] POST_PUBLIC_ENDPOINTS = {"/auth/**","/tutor/verify","/parent/verify"};
     @Value("${jwt.secret-key}")
     private String secretKey;
     @Bean
@@ -28,8 +29,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.POST, POST_PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, GET_PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 ->
