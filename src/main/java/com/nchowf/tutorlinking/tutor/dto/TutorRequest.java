@@ -21,10 +21,6 @@ public class TutorRequest extends UserRequest {
     @Min(value = 0, message = "Giới tính là 0 (Nam) hoặc 1 (Nữ)")
     @Max(value = 1, message = "Giới tính là 0 (Nam) hoặc 1 (Nữ)")
     private int gender;
-//    @NotNull(message = "Ảnh thẻ không được thiếu")
-//    private MultipartFile avt;
-//    @NotNull(message = "Ảnh bằng cấp được thiếu")
-//    private MultipartFile degree;
     @NotBlank(message = "Địa chỉ hiện tại không được thiếu")
     private String address;
     @NotBlank(message = "Tên trường đại học/cao đẳng không được thiếu")

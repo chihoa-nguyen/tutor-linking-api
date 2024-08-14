@@ -29,7 +29,7 @@ public class FilterClassRequest implements Filterable<Class> {
         if(!CollectionUtils.isEmpty(gradeIds)){
             specification = specification.and(ClassSpecification.hasGradeIds(gradeIds.stream().toList()));
         }
-        if(gender != null){
+        if(gender != null && !gender.equals(Gender.NONE)){
             specification = specification.and(ClassSpecification.hasGender(gender));
         }
         if(!CollectionUtils.isEmpty(positions)){

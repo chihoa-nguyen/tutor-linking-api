@@ -7,6 +7,7 @@ import com.nchowf.tutorlinking.utils.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,6 +20,10 @@ public class TutorController{
     public String verify(@RequestParam String token){
         return tutorService.verifyEmail(token);
     }
+    @PostMapping("/image/{id}")
+    public void uploadImage(@PathVariable Integer id, @RequestPart MultipartFile avt, @RequestPart MultipartFile degree){
+        tutorService.uploadAndUpdateTutorImage(id, avt, degree);
+    }
     @GetMapping("")
     public ApiResponse<List<TutorResponse>> getAll() {
         return ApiResponse.<List<TutorResponse>>builder()
@@ -27,13 +32,12 @@ public class TutorController{
                 .build();
     }
     @GetMapping("/class/{classId}")
-    public ApiResponse<List<TutorResponse>> getSuitableClass(@PathVariable Integer classId) {
-        return ApiResponse.<List<TutorResponse>>builder()
+    public ApiResponse<List<Tutor>> getSuitableClass(@PathVariable Integer classId) {
+        return ApiResponse.<List<Tutor>>builder()
                 .message("Lấy danh sách gia sư phù hợp với lớp thành công")
                 .data(tutorService.getTutorsSuitableForClass(classId))
                 .build();
     }
-
     @GetMapping("/{id}")
     public ApiResponse<TutorResponse> getById(@PathVariable("id") Integer id) {
         return ApiResponse.<TutorResponse>builder()
@@ -48,7 +52,6 @@ public class TutorController{
                 .data(tutorService.getInforByToken())
                 .build();
     }
-
     @PutMapping("")
     public ApiResponse<TutorDetailResponse> update(@RequestBody @Valid TutorUpdateRequest request) {
         return ApiResponse.<TutorDetailResponse>builder()

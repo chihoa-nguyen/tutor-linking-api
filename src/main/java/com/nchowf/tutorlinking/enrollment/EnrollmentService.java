@@ -53,6 +53,7 @@ public class EnrollmentService {
     public Void sendAcceptMail(Integer id){
         Enrollment enrollment = enrollmentRepo.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.ENROLLMENT_NOT_FOUND));
+
         emailService.sendClassDetailsMail(enrollment, enrollment.getTutor().getEmail());
         return null;
     }

@@ -19,6 +19,10 @@ public class ClassController {
     public ClassDetailResponse create(@RequestBody @Valid ClassRequest request){
         return classService.createClass(request);
     }
+    @PostMapping("/class/send-mail/{id}")
+    public void sendMail(@PathVariable  Integer id){
+        classService.sendClassToSuitableTutors(id);
+    }
     @PostMapping("/classes")
     public List<ClassResponse> getClasses(@RequestBody FilterClassRequest request){
         return classService.getClasses(request);
@@ -29,7 +33,7 @@ public class ClassController {
     }
     @GetMapping("class/{id}")
     public ClassResponse getById(@PathVariable("id") Integer id){
-        return classService.getResponseById(classService.getById(id));
+        return classService.getResponseById(id);
     }
     @GetMapping("class/detail/{id}")
     public ClassDetailResponse getDetailById(@PathVariable("id") Integer id){
@@ -43,7 +47,7 @@ public class ClassController {
     public ClassDetailResponse updateById(@PathVariable("id") Integer id, @RequestBody @Valid ClassRequest request){
         return classService.updateClass(id, request);
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("class/{id}")
     public void delete(@PathVariable("id") Integer id) {
         classService.deleteClass(id);
     }

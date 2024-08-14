@@ -20,8 +20,8 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private static final String[] GET_PUBLIC_ENDPOINTS = {"/subject","/grade"};
-    private static final String[] POST_PUBLIC_ENDPOINTS = {"/auth/**","/tutor/verify","/parent/verify"};
+    private static final String[] GET_PUBLIC_ENDPOINTS = {"/subject","/grade","/tutor/verify","/parent/verify"};
+    private static final String[] POST_PUBLIC_ENDPOINTS = {"/auth/**","/tutor/verify","/parent/verify","/tutor/image/**"};
     @Value("${jwt.secret-key}")
     private String secretKey;
     @Bean

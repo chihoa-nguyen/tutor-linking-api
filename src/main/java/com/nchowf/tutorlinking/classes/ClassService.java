@@ -1,9 +1,10 @@
 package com.nchowf.tutorlinking.classes;
 
-import com.nchowf.tutorlinking.classes.dto.ClassRequest;
 import com.nchowf.tutorlinking.classes.dto.ClassDetailResponse;
+import com.nchowf.tutorlinking.classes.dto.ClassRequest;
 import com.nchowf.tutorlinking.classes.dto.ClassResponse;
 import com.nchowf.tutorlinking.classes.dto.FilterClassRequest;
+import com.nchowf.tutorlinking.email.EmailService;
 import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.grade.Grade;
@@ -15,10 +16,13 @@ import com.nchowf.tutorlinking.subject.SubjectService;
 import com.nchowf.tutorlinking.tutor.Tutor;
 import com.nchowf.tutorlinking.tutor.TutorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,7 @@ public class ClassService {
     private final SubjectService subjectService;
     private final ParentService parentService;
     private final TutorService tutorService;
+    private final EmailService mailService;
     private final ClassMapper classMapper;
     public ClassDetailResponse createClass(ClassRequest request) {
         Parent parent = parentService.getThisParent();
@@ -39,11 +44,22 @@ public class ClassService {
         classroom.setGrade(grade);
         return classMapper.toClassDetailResponse(classRepo.save(classroom));
     }
+    public void sendClassToSuitableTutors(Integer classId){
+        ClassResponse classroom = getResponseById(classId);
+        List<Tutor> suitableTutors = tutorService.getTutorsSuitableForClass(classId);
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+        suitableTutors.forEach(tutor -> {
+            executor.submit(() -> {
+                mailService.sendClassSuitableMail(classroom, tutor);
+            });
+        });
+        executor.shutdown();
+    }
     public Class getById(Integer id) {
         return classRepo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_FOUND));
     }
-    public ClassResponse getResponseById(Class classroom) {
-        return classMapper.toClassResponse(classroom);
+    public ClassResponse getResponseById(Integer classId) {
+        return classMapper.toClassResponse(getById(classId));
     }
     public ClassDetailResponse getDetailsById(Class classroom) {
         return classMapper.toClassDetailResponse(classroom);
@@ -64,10 +80,13 @@ public class ClassService {
         return classMapper.toClassDetailResponse(classRepo.save(classroom));
     }
     public void deleteClass(Integer id) {
+        Class classroom = getById(id);
+        if(classroom.isHasTutor()) throw new AppException(ErrorCode.CLASS_CANNOT_DELETE);
         classRepo.deleteById(id);
     }
     public List<ClassResponse> getClasses(FilterClassRequest request) {
-        return classRepo.findAll(request.toSpecification())
+        Sort sort = Sort.by("createdAt").descending();
+        return classRepo.findAll(request.toSpecification(), sort)
                 .stream().map(classMapper::toClassResponse).toList();
     }
     public void updateHasTutor(Integer classId) {

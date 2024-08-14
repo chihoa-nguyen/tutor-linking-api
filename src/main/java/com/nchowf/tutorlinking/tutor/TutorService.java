@@ -9,7 +9,6 @@ import com.nchowf.tutorlinking.grade.Grade;
 import com.nchowf.tutorlinking.grade.GradeService;
 import com.nchowf.tutorlinking.subject.Subject;
 import com.nchowf.tutorlinking.subject.SubjectService;
-import com.nchowf.tutorlinking.token.JwtService;
 import com.nchowf.tutorlinking.token.Token;
 import com.nchowf.tutorlinking.token.TokenRepo;
 import com.nchowf.tutorlinking.tutor.dto.TutorDetailResponse;
@@ -17,16 +16,18 @@ import com.nchowf.tutorlinking.tutor.dto.TutorRequest;
 import com.nchowf.tutorlinking.tutor.dto.TutorResponse;
 import com.nchowf.tutorlinking.tutor.dto.TutorUpdateRequest;
 import com.nchowf.tutorlinking.user.UserService;
+import com.nchowf.tutorlinking.utils.CloudinaryService;
+import com.nchowf.tutorlinking.utils.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -36,13 +37,9 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     private final SubjectService subjectService;
     private final GradeService gradeService;
     private final EmailService emailService;
+    private final CloudinaryService cloudinaryService;
     private final TutorMapper tutorMapper;
     private final PasswordEncoder passwordEncoder;
-    @Value("${gg-driver.avt-folder-id}")
-    private String AVT_FOLDER_ID;
-    @Value("${gg-driver.degree-folder-id}")
-    private String DEGREE_FOLDER_ID;
-    private final JwtService jwtService;
     @Override
     public TutorDetailResponse register(TutorRequest request){
         if (tutorRepo.existsByPhoneNumber(request.getPhoneNumber()))
@@ -59,6 +56,25 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         return tutorMapper.tuTutorDetailResponse(tutorRepo
                 .save(tutor));
     }
+    @Transactional
+    public void uploadAndUpdateTutorImage(Integer tutor_id, MultipartFile avt, MultipartFile degree) {
+        Tutor tutor = tutorRepo.findById(tutor_id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        FileUploadUtil.assertAllowed(avt, FileUploadUtil.IMAGE_PATTERN);
+        FileUploadUtil.assertAllowed(degree, FileUploadUtil.IMAGE_PATTERN);
+        CompletableFuture<String> avtUploadFuture = CompletableFuture.supplyAsync(() -> {
+            String fileName = FileUploadUtil.getFileName(avt.getOriginalFilename());
+            return this.cloudinaryService.uploadFile(avt, fileName);
+        });
+        CompletableFuture<String> degreeUploadFuture = CompletableFuture.supplyAsync(() -> {
+            String fileName = FileUploadUtil.getFileName(degree.getOriginalFilename());
+            return this.cloudinaryService.uploadFile(degree, fileName);
+        });
+        String avtUrl = avtUploadFuture.join();
+        String degreeUrl = degreeUploadFuture.join();
+        tutor.setAvt(avtUrl);
+        tutor.setDegree(degreeUrl);
+        tutorRepo.save(tutor);
+    }
     @Override
     public void sendVerificationEmail(Integer id, String role) {
         Tutor tutor = tutorRepo.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -67,9 +83,7 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         emailService.sendVerificationMail(tutor.getName(), tutor.getEmail(),
                 token.getToken(), role);
     }
-    public void uploadAndUpdateTutorImage(Integer id, TutorRequest request) throws ExecutionException, InterruptedException, IOException {
 
-    }
     @Override
     public String verifyEmail(String token) {
         Token verificationToken = tokenRepo.findByTokenAndRoleAndAndType(token, Role.TUTOR, TokenType.VERIFICATION);
@@ -88,13 +102,9 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         List<Subject> subjects = subjectService.getAllById(request.getSubjects());
         List<Grade> grades = gradeService.getAllById(request.getGrades());
-//        File[] files = prepareFileToUpload(request);
-//        String[] url = uploadFileToDrive(files[0], files[1]);
         tutorMapper.updateTutor(tutor, request);
         tutor.setSubjects(new HashSet<>(subjects));
         tutor.setGrades(new HashSet<>(grades));
-//        tutor.setAvt(url[0]);
-//        tutor.setDegree(url[1]);
         return tutorMapper.tuTutorDetailResponse(tutorRepo.save(tutor));
     }
     public TutorResponse getById(Integer id){
@@ -124,9 +134,8 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         return tutorRepo.findAll().stream()
                 .map(tutorMapper::tuTutorResponse).toList();
     }
-    public List<TutorResponse> getTutorsSuitableForClass(Integer classId) {
-        return tutorRepo.findTutorsSuitable(classId)
-                .stream().map(tutorMapper::tuTutorResponse).toList();
+    public List<Tutor> getTutorsSuitableForClass(Integer classId) {
+        return tutorRepo.findTutorsSuitable(classId);
     }
     @Override
     public void delete(Integer id) {

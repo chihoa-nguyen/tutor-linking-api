@@ -3,6 +3,7 @@ package com.nchowf.tutorlinking.classes.dto;
 import com.nchowf.tutorlinking.utils.Address;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ClassRequest {
     @NotNull(message = "Môn học không được thiếu")
+    @NotEmpty(message = "Môn học không được thiếu")
     private List<Integer> subjects;
     @NotNull(message="Số buổi dạy không được thiếu")
     @Min(value = 1, message ="Số buổi dạy tối thiếu là 1")
@@ -24,7 +26,7 @@ public class ClassRequest {
     private String time;
     @NotNull(message = "Khối dạy không được thiếu")
     private Integer gradeId;
-    @Min(value = 1, message ="Học phí phải là số dương")
+    @Min(value = 0, message ="Học phí không được thiếu")
     private int fee;
     @NotNull(message = "Địa chỉ lớp không được thiếu")
     private Address address;
