@@ -42,7 +42,8 @@ public class AuthController {
                .build();
     }
     @PostMapping("/tutor/register")
-    public ApiResponse<TutorDetailResponse> register(@RequestBody @Valid TutorRequest request) throws IOException, ExecutionException, InterruptedException {
+
+    public ApiResponse<TutorDetailResponse> register(@RequestBody @Valid TutorRequest request) {
         return ApiResponse.<TutorDetailResponse>builder()
                 .message("Tạo mới gia sư thành công")
                 .data(authService.tutorRegister(request))
@@ -54,5 +55,12 @@ public class AuthController {
                 .message("Làm mới mã token thành công")
                 .data(authService.refreshToken(request))
                 .build();
+    }
+    @PostMapping("/{role}/change-password")
+    public ApiResponse<Void> changePassword(@RequestBody @Valid ChangePasswordRequest request, @PathVariable String role){
+        return ApiResponse.<Void>builder()
+               .message("Thay đổi mật khẩu thành công")
+                .data(authService.changePassword(request, role))
+               .build();
     }
 }

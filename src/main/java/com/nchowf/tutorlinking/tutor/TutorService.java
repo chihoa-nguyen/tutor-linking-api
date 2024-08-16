@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.tutor;
 
+import com.nchowf.tutorlinking.auth.ChangePasswordRequest;
 import com.nchowf.tutorlinking.email.EmailService;
 import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Role;
@@ -83,7 +84,6 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
         emailService.sendVerificationMail(tutor.getName(), tutor.getEmail(),
                 token.getToken(), role);
     }
-
     @Override
     public String verifyEmail(String token) {
         Token verificationToken = tokenRepo.findByTokenAndRoleAndAndType(token, Role.TUTOR, TokenType.VERIFICATION);
@@ -130,6 +130,15 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     public String getEmailFromToken() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
+
+    @Override
+    public void changePassword(ChangePasswordRequest request) {
+        Tutor tutor = tutorRepo.findByEmail(request.getEmail()).orElseThrow(() ->new AppException(ErrorCode.USER_NOT_EXISTED));
+        if (!passwordEncoder.matches(request.getOldPassword(), tutor.getPassword())) throw  new AppException(ErrorCode.PASSWORD_WRONG);
+        tutor.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        tutorRepo.save(tutor);
+    }
+
     public List<TutorResponse> getAll() {
         return tutorRepo.findAll().stream()
                 .map(tutorMapper::tuTutorResponse).toList();

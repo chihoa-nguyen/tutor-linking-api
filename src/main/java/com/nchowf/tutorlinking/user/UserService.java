@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.user;
 
+import com.nchowf.tutorlinking.auth.ChangePasswordRequest;
 import com.nchowf.tutorlinking.user.dto.UserRequest;
 import com.nchowf.tutorlinking.user.dto.UserResponse;
 import com.nchowf.tutorlinking.user.dto.UserUpdateRequest;
@@ -15,5 +16,6 @@ public interface UserService<T extends UserRequest, U extends UserUpdateRequest,
     R update(U request);
     R getInforByToken();
     String getEmailFromToken();
+    void changePassword(ChangePasswordRequest request);
     void delete(Integer id);
 }

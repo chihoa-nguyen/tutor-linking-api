@@ -1,5 +1,6 @@
 package com.nchowf.tutorlinking.parent;
 
+import com.nchowf.tutorlinking.auth.ChangePasswordRequest;
 import com.nchowf.tutorlinking.email.EmailService;
 import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Role;
@@ -72,6 +73,15 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
     @Override
     public String getEmailFromToken() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    @Override
+    public void changePassword(ChangePasswordRequest request) {
+        Parent parent = parentRepo.findByEmail(request.getEmail()).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+        if (!passwordEncoder.matches(request.getOldPassword(), parent.getPassword()))
+            throw new AppException(ErrorCode.PASSWORD_WRONG);
+        parent.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        parentRepo.save(parent);
     }
 
 

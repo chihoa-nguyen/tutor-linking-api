@@ -20,10 +20,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -72,7 +71,7 @@ public class AuthService {
     public ParentResponse parentRegister(ParentRequest request){
         return parentService.register(request);
     }
-    public TutorDetailResponse tutorRegister(TutorRequest request) throws IOException, ExecutionException, InterruptedException {
+    public TutorDetailResponse tutorRegister(TutorRequest request){
         return tutorService.register(request);
     }
     private User retrieveUserByEmailAndRole(String email, String role) {
@@ -93,5 +92,11 @@ public class AuthService {
     private User retrieveUserByEmailAndScope(String userEmail, String token) throws ParseException {
         String scope = jwtService.extractScope(token);
         return (scope.equals("PARENT")) ? parentService.getParentByEmail(userEmail) : tutorService.getTutorByEmail(userEmail);
+    }
+    public Void changePassword(ChangePasswordRequest request, String role){
+        if(!request.getNewPassword().equals(request.getConfirmNewPassword())) throw new AppException(ErrorCode.PASSWORD_NOT_SAME);
+        if(Objects.equals(role, "parent")) parentService.changePassword(request);
+        if(Objects.equals(role, "tutor")) tutorService.changePassword(request);
+        return null;
     }
 }

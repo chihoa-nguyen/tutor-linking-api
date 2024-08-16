@@ -28,7 +28,7 @@ public enum ErrorCode {
     USER_NOT_ENABLED("Tài khoản chưa được kích hoạt", HttpStatus.BAD_REQUEST ),
     MAX_FILE_SIZE("Kích thước file không quá 2MB", HttpStatus.BAD_REQUEST),
     NOT_ALLOWED_FILE("Chỉ được dùng file có đuôi jpg, png, gif, bmp",HttpStatus.BAD_REQUEST ),
-    CLASS_CANNOT_DELETE("Bạn không thể xóa lớp đã có gia sư",HttpStatus.BAD_REQUEST);
+    CLASS_CANNOT_DELETE("Bạn không thể xóa lớp đã có gia sư",HttpStatus.BAD_REQUEST), PASSWORD_NOT_SAME("Mật khẩu mới không khớp", HttpStatus.BAD_REQUEST);
     ErrorCode(String message, HttpStatusCode statusCode) {
         this.message = message;
         this.statusCode = statusCode;
