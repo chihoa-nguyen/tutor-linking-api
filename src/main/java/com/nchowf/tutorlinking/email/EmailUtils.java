@@ -4,16 +4,32 @@ import com.nchowf.tutorlinking.classes.dto.ClassResponse;
 import com.nchowf.tutorlinking.enrollment.Enrollment;
 import com.nchowf.tutorlinking.subject.Subject;
 import com.nchowf.tutorlinking.utils.Address;
+import org.springframework.beans.factory.annotation.Value;
 
 public class EmailUtils {
-    public static String getVerificationMessage(String name, String userType, String host, String token) {
+    @Value("${spring.mail.verify.host}")
+    private static String host;
+    public static String getVerificationMessage(String name, String userType, String token) {
         return "Xin chào " + name + ",\n\nBạn đâ đăng ký tài khoản trên TutorLinking."
                 + "\nTrước khi có thể sử dụng tài khoản của mình, bạn cần xác minh rằng đây là địa chỉ email của mình bằng cách nhấp vào đây:\n"
-                + getVerificationUrl(host, userType, token)
+                + getVerificationUrl(userType, token)
                 + "\n\nXin cảm ơn,"
                 + "\nTutorLinking";
     }
-    private static String getVerificationUrl(String host, String userType, String token) {
+    public static String getPasswordResetMessage(String userType, String token) {
+        return "Xin chào, \n\n"
+                + "Bạn đã yêu cầu khôi phục mật khẩu cho tài khoản của mình trên TutorLinking."
+                + "\nĐể đặt lại mật khẩu, vui lòng nhấp vào đây:\n"
+                + getPasswordResetUrl(userType, token)
+                + "\n\nXin cảm ơn,"
+                + "\nTutorLinking";
+    }
+
+    private static String getPasswordResetUrl(String userType, String token) {
+        return host + userType + "/reset-password?token=" + token;
+    }
+
+    private static String getVerificationUrl(String userType, String token) {
         return host + userType + "/verify?token=" + token;
     }
     private static String getClassInfoUrl(Integer id){

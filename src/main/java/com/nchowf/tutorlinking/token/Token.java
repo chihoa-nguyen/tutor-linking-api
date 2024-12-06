@@ -31,10 +31,10 @@ public class Token {
     public boolean revoked;
     @ColumnDefault("false")
     public boolean expired;
-    public Token(Integer userId, Role role) {
+    public Token(Integer userId, Role role, TokenType type) {
         this.userId = userId;
         this.token = UUID.randomUUID().toString();
         this.role = role;
-        this.type = TokenType.VERIFICATION;
+        this.type = type;
     }
 }

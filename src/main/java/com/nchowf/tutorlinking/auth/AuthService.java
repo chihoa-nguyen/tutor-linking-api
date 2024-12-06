@@ -1,5 +1,8 @@
 package com.nchowf.tutorlinking.auth;
 
+import com.nchowf.tutorlinking.auth.dto.AuthRequest;
+import com.nchowf.tutorlinking.auth.dto.AuthResponse;
+import com.nchowf.tutorlinking.auth.dto.ChangePasswordRequest;
 import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Role;
 import com.nchowf.tutorlinking.enums.TokenType;
@@ -63,9 +66,14 @@ public class AuthService {
         saveToken(user, token, TokenType.ACCESS);
         return new AuthResponse(jwtToken, refreshToken);
     }
-    public Void sendEmail(String role, Integer id){
+    public Void sendVerificationEmail(String role, Integer id){
         if(role.equals("parent"))  parentService.sendVerificationEmail(id, role);
         else tutorService.sendVerificationEmail(id, role);
+        return null;
+    }
+    public Void sendPasswordResetEmail(String email, String role){
+        if(role.equals("parent"))  parentService.forgotPassword(email);
+        else tutorService.forgotPassword(email);
         return null;
     }
     public ParentResponse parentRegister(ParentRequest request){

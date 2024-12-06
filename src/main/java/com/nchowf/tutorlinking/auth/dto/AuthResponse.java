@@ -1,4 +1,4 @@
-package com.nchowf.tutorlinking.auth;
+package com.nchowf.tutorlinking.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

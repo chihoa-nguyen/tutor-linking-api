@@ -1,5 +1,8 @@
 package com.nchowf.tutorlinking.auth;
 
+import com.nchowf.tutorlinking.auth.dto.AuthRequest;
+import com.nchowf.tutorlinking.auth.dto.AuthResponse;
+import com.nchowf.tutorlinking.auth.dto.ChangePasswordRequest;
 import com.nchowf.tutorlinking.parent.dto.ParentRequest;
 import com.nchowf.tutorlinking.parent.dto.ParentResponse;
 import com.nchowf.tutorlinking.token.RefreshTokenRequest;
@@ -9,11 +12,10 @@ import com.nchowf.tutorlinking.utils.ApiResponse;
 import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.text.ParseException;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +33,14 @@ public class AuthController {
     public ApiResponse<Void> sendVerificationEmail(@PathVariable String role, @PathVariable Integer id){
         return ApiResponse.<Void>builder()
                 .message("Gửi mail xác thực thành công")
-                .data(authService.sendEmail(role,id))
+                .data(authService.sendVerificationEmail(role,id))
+                .build();
+    }
+    @PostMapping("/forgot-password")
+    public ApiResponse<Void> sendPasswordResetEmail(@RequestParam String email, @RequestParam String role){
+        return ApiResponse.<Void>builder()
+                .message("Gửi mail xác thực thành công")
+                .data(authService.sendPasswordResetEmail(email, role))
                 .build();
     }
     @PostMapping("/parent/register")

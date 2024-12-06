@@ -1,6 +1,6 @@
 package com.nchowf.tutorlinking.parent;
 
-import com.nchowf.tutorlinking.auth.ChangePasswordRequest;
+import com.nchowf.tutorlinking.auth.dto.ChangePasswordRequest;
 import com.nchowf.tutorlinking.email.EmailService;
 import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Role;
@@ -41,12 +41,21 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
     }
     @Override
     public void sendVerificationEmail(Integer id, String role) {
-        Token token = new Token(id, Role.PARENT);
+        Token token = new Token(id, Role.PARENT, TokenType.VERIFICATION);
         tokenRepo.save(token);
         ParentResponse parent = getById(id);
         emailService.sendVerificationMail(parent.getName(),
                 parent.getEmail(), token.getToken(),role);
     }
+
+    @Override
+    public void forgotPassword(String email) {
+        Parent parent = getParentByEmail(email);
+        Token token = new Token(parent.getId(), Role.PARENT, TokenType.RESET_PASSWORD);
+        tokenRepo.save(token);
+        emailService.sendPasswordResetMail(email, token.getToken(),"parent");
+    }
+
     @Override
     public String verifyEmail(String token) {
         Token verificationToken = tokenRepo.findByTokenAndRoleAndAndType(token, Role.PARENT, TokenType.VERIFICATION);
@@ -83,8 +92,6 @@ public class ParentService implements UserService<ParentRequest,ParentUpdateRequ
         parent.setPassword(passwordEncoder.encode(request.getNewPassword()));
         parentRepo.save(parent);
     }
-
-
     public List<ParentResponse> getAll() {
         return parentRepo.findAllByIsEnableTrue().stream()
                 .map(parentMapper::toParentResponse).toList();

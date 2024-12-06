@@ -1,6 +1,6 @@
 package com.nchowf.tutorlinking.tutor;
 
-import com.nchowf.tutorlinking.auth.ChangePasswordRequest;
+import com.nchowf.tutorlinking.auth.dto.ChangePasswordRequest;
 import com.nchowf.tutorlinking.email.EmailService;
 import com.nchowf.tutorlinking.enums.ErrorCode;
 import com.nchowf.tutorlinking.enums.Role;
@@ -8,6 +8,7 @@ import com.nchowf.tutorlinking.enums.TokenType;
 import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.grade.Grade;
 import com.nchowf.tutorlinking.grade.GradeService;
+import com.nchowf.tutorlinking.parent.Parent;
 import com.nchowf.tutorlinking.subject.Subject;
 import com.nchowf.tutorlinking.subject.SubjectService;
 import com.nchowf.tutorlinking.token.Token;
@@ -79,11 +80,20 @@ public class TutorService implements UserService<TutorRequest, TutorUpdateReques
     @Override
     public void sendVerificationEmail(Integer id, String role) {
         Tutor tutor = tutorRepo.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
-        Token token = new Token(id, Role.TUTOR);
+        Token token = new Token(id, Role.TUTOR, TokenType.VERIFICATION);
         tokenRepo.save(token);
         emailService.sendVerificationMail(tutor.getName(), tutor.getEmail(),
                 token.getToken(), role);
     }
+
+    @Override
+    public void forgotPassword(String email) {
+        Tutor tutor = getTutorByEmail(email);
+        Token token = new Token(tutor.getId(), Role.TUTOR, TokenType.RESET_PASSWORD);
+        tokenRepo.save(token);
+        emailService.sendPasswordResetMail(email, token.getToken(),"tutor");
+    }
+
     @Override
     public String verifyEmail(String token) {
         Token verificationToken = tokenRepo.findByTokenAndRoleAndAndType(token, Role.TUTOR, TokenType.VERIFICATION);

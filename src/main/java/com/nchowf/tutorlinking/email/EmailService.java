@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailService {
     private final JavaMailSender emailSender;
-    @Value("${spring.mail.verify.host}")
-    private String host;
 
     @Async
     public void sendVerificationMail(String name, String to, String token, String role){
@@ -23,7 +21,15 @@ public class EmailService {
         message.setSubject("Xác thực email cho tài khoản TutorLinking");
         message.setFrom("tutor.linking@gmail.com");
         message.setTo(to);
-        message.setText(EmailUtils.getVerificationMessage(name, role ,host, token));
+        message.setText(EmailUtils.getVerificationMessage(name, role, token));
+        emailSender.send(message);
+    }
+    public void sendPasswordResetMail(String to, String token, String role){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Reset mật khẩu cho tài khoản TutorLinking");
+        message.setFrom("tutor.linking@gmail.com");
+        message.setTo(to);
+        message.setText(EmailUtils.getPasswordResetMessage(role, token));
         emailSender.send(message);
     }
     @Async
