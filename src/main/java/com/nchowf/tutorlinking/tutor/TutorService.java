@@ -8,7 +8,6 @@ import com.nchowf.tutorlinking.enums.TokenType;
 import com.nchowf.tutorlinking.exception.AppException;
 import com.nchowf.tutorlinking.grade.Grade;
 import com.nchowf.tutorlinking.grade.GradeService;
-import com.nchowf.tutorlinking.parent.Parent;
 import com.nchowf.tutorlinking.subject.Subject;
 import com.nchowf.tutorlinking.subject.SubjectService;
 import com.nchowf.tutorlinking.token.Token;

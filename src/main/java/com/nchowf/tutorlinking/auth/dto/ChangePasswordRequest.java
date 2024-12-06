@@ -1,6 +1,5 @@
 package com.nchowf.tutorlinking.auth.dto;
 
-import com.nchowf.tutorlinking.auth.dto.ResetPasswordRequest;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
